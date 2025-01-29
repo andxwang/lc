@@ -605,4 +605,42 @@ def reverseBetween(head: ListNode | None, left: int, right: int) -> ListNode | N
     return head
 
 
-print(reverseBetween(ListNode.create_linked_list([10, 20, 30, 40, 50]), 1, 4))
+def findMaxFish(grid: list[list[int]]) -> int:
+    height, width = len(grid), len(grid[0])
+    max_fish = 0
+    visited = set()
+    
+    for r in range(height):
+        for c in range(width):
+            if grid[r][c] == 0 or (r, c) in visited:
+                continue
+            stack = []
+            stack.append((r, c))  # starting cell
+            fish_caught = 0
+            while stack:
+                i, j = stack.pop()
+                if (i, j) not in visited:
+                    visited.add((i, j))
+                    if grid[i][j] > 0:
+                        fish_caught += grid[i][j]
+                        # up, left, down, right
+                        if i > 0:
+                            stack.append((i - 1, j))
+                        if j > 0:
+                            stack.append((i, j - 1))
+                        if i < height - 1:
+                            stack.append((i + 1, j))
+                        if j < width - 1:
+                            stack.append((i, j + 1))
+                            
+            max_fish = max(max_fish, fish_caught)
+                    
+    return max_fish
+            
+    
+grid = [[1, 2, 9],
+        [4, 0, 0],
+        [0, 8, 9],
+        [0, 0, 0]]
+print(findMaxFish(grid))
+    
