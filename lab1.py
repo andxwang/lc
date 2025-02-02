@@ -636,11 +636,28 @@ def findMaxFish(grid: list[list[int]]) -> int:
             max_fish = max(max_fish, fish_caught)
                     
     return max_fish
-            
+
+
+def removeDuplicates(nums: list[int]) -> int:
+    if len(nums) == 1 or len(nums) == 2:
+        return len(nums)
     
-grid = [[1, 2, 9],
-        [4, 0, 0],
-        [0, 8, 9],
-        [0, 0, 0]]
-print(findMaxFish(grid))
+    k = 2  # next valid idx
+    for i in range(2, len(nums)):
+        print(nums, end='\t')
+        if nums[i] == nums[k - 2]:
+            # triple
+            print(f"k is {k}; i is {i}; skip")
+            pass
+        else:
+            print(f"k is {k}; i is {i}; copy")
+            nums[k] = nums[i]
+            k += 1
+    return k
+
+    
+l = [0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 9]
+print(removeDuplicates(l))
+print(l)
+        
     
