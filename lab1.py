@@ -53,6 +53,32 @@ def reverseList(head: ListNode):
 
     return new_head
 
+def twoSum(nums: list[int], target: int) -> list[int]:
+    hmap = {}
+    for i, n in enumerate(nums):
+        hmap[n] = i
+    for i, n in enumerate(nums):
+        if target - n in hmap:
+            complement_idx = hmap[target - n]  # save so don't access twice
+            if complement_idx != i:
+                return [i, complement_idx]
+
+from collections import defaultdict
+def char_counter(s: str):
+    counts = [0] * 26
+    for c in s:
+        counts[ord(c) - ord('a')] += 1
+    return tuple(counts)
+
+def groupAnagrams(strs: list[str]) -> list[list[str]]:
+    # use (26,) tuple of letters as key for hash map
+    ana_dict = defaultdict(list)
+    for s in strs:
+        ana_dict[char_counter(s)].append(s)
+    return list(ana_dict.values())
+        
+print(groupAnagrams(['abc', 'def', 'cab']))
+        
 def findMin(nums):
     p = 0
     q = len(nums) - 1
@@ -655,9 +681,3 @@ def removeDuplicates(nums: list[int]) -> int:
             k += 1
     return k
 
-    
-l = [0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 9]
-print(removeDuplicates(l))
-print(l)
-        
-    
