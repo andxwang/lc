@@ -36,9 +36,11 @@ def combinationSum(candidates: list[int], target: int) -> list[list[int]]:
     def aux(subset, total: int, i: int):
         if total == target:
             result.append(subset.copy())
+            # print(f"success: {subset}")
             return
         if i >= len(candidates) or total > target:
             # failure
+            # print(f"   fail: {subset}\ti = {i}\ttotal = {total}")
             return
         
         # decision 1: choose this number. add to total and keep it
@@ -227,4 +229,3 @@ def letterCombinations(digits: str) -> list[str]:
         
     return res
 
-print(letterCombinations('222'))
