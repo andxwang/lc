@@ -28,17 +28,17 @@ def maxAreaOfIsland(grid: list[list[str]]) -> int:
     for r in range(height):
         for c in range(width):
             if grid[r][c] == 1:
-                curr_area = 1
+                curr_area = 0
                 stack = [(r, c)]
-                grid[r][c] = 0
                 while stack:
                     i, j = stack.pop()
-                    # print(grid)
+                    if grid[i][j] == 0:
+                        continue
+                    grid[i][j] = 0
+                    curr_area += 1
+                    print("adding from", (i, j))
                     for ni, nj in [(i - 1, j), (i, j - 1), (i + 1, j), (i, j + 1)]:
                         if ni in range(height) and nj in range(width) and grid[ni][nj] == 1:
-                            grid[ni][nj] = 0
-                            print("adding from", (ni, nj))
-                            curr_area += 1
                             stack.append((ni, nj))
                     
                 print("Finished island with area", curr_area)
@@ -53,5 +53,34 @@ grid = [
     [1,1,0,0,0],
     [0,0,1,0,1]
 ]
-print(maxAreaOfIsland(grid))
+
+def spiralOrder(matrix: list[list[int]]) -> list[int]:
+    """strategy:
+    whenever possible, do in order:
+    - go right
+    - go down
+    - go left
+    - go up
+    keep tracker of curr direction
+    """
+    visited = set()
+    m, n = len(matrix), len(matrix[0])
+    dirs = [(0, 1), (1, 0), (0, -1), (-1, 0)]  # R, D, L, U
+    out = []
+    dir_idx = 0
+    curr = (0, 0)
+    while len(visited) < m * n:
+        i, j = curr
+        visited.add((i, j))
+        out.append(matrix[i][j])
         
+        di, dj = dirs[dir_idx]
+        if not (i + di in range(m) and j + dj in range(n) and (i + di, j + dj) not in visited):
+            dir_idx = (dir_idx + 1) % 4
+            di, dj = dirs[dir_idx]
+        
+        curr = (i + di, j + dj)
+            
+    return out
+            
+print(spiralOrder([[1,2,3,4],[5,6,7,8],[9,10,11,12]]))
