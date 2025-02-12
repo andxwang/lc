@@ -268,33 +268,20 @@ def print_graph(node):
 def cloneGraph(node: Node | None) -> Node | None:
     if not node:
         return None
-    result = Node(node.val)  # first node has val 1
-    stack_orig = [node]  # track original
-    stack_new = [result]
-    visited = set()
     
-    new_nodes = {1: result}  # map of new nodes' vals: Node object
+    node_map = {node: Node(node.val)}  # map old to new node
+    stack = [node]
     
-    while stack_orig:
-        curr = stack_orig.pop()
-        new_node = stack_new.pop()
-        if curr.val in visited:
-            continue
-        visited.add(curr.val)
-        for old_nbor in curr.neighbors:
-            if old_nbor.val not in new_nodes:
-                to_append = Node(old_nbor.val)
-                new_node.neighbors.append(to_append)
-                new_nodes[to_append.val] = to_append
-            else:
-                to_append = new_nodes[old_nbor.val]
-                new_node.neighbors.append(to_append)
-            stack_new.append(to_append)
+    while stack:
+        curr = stack.pop()
+        for nbor in curr.neighbors:
+            if nbor not in node_map:
+                node_map[nbor] = Node(nbor.val)
+                stack.append(nbor)
+            node_map[curr].neighbors.append(node_map[nbor])
             
-        
-        stack_orig.extend(curr.neighbors)
-                
-    return result
+    return node_map[node]
+
 
 graph = create_graph([[2,3], [1], [1]])
 print_graph(graph)
