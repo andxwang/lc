@@ -55,6 +55,19 @@ class TreeNode:
         return [first_line, second_line] + lines, n + m + u, max(p, q) + 2, n + u // 2
 
 
+def sortedArrayToBST(nums: list[int]) -> TreeNode | None:
+    if len(nums) == 0:
+        return None
+    if len(nums) == 1:
+        return TreeNode(nums[0])
+    m = len(nums) // 2  # left
+    root = TreeNode(nums[m])
+    root.left = sortedArrayToBST(nums[:m])
+    root.right = sortedArrayToBST(nums[m+1:])
+            
+    return root
+
+
 def invertTree(root: TreeNode | None) -> TreeNode | None:
     if root is None:
         return None
@@ -375,7 +388,7 @@ r1.right.left = TreeNode(17)
 r1.right.right = TreeNode(25)
 r1.left.left.left = TreeNode(6)
 r1.left.left.right = TreeNode(9)
-print(r1)
+# print(r1)
 
 r2 = TreeNode(1)
 r2.left = TreeNode(2)
@@ -389,6 +402,4 @@ r2.right.right = TreeNode(7)
 r3 = TreeNode(1)
 r3.left = TreeNode(2)
 # print(r3)
-
-print(hasPathSumAlt(r1, 60))
 
