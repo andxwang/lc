@@ -76,9 +76,7 @@ def groupAnagrams(strs: list[str]) -> list[list[str]]:
     for s in strs:
         ana_dict[char_counter(s)].append(s)
     return list(ana_dict.values())
-        
-print(groupAnagrams(['abc', 'def', 'cab']))
-        
+
 def findMin(nums):
     p = 0
     q = len(nums) - 1
@@ -393,6 +391,28 @@ def findDuplicate(nums: list[int]):
         slow2 = nums[slow2]
         slow = nums[slow]
     return slow
+
+def deleteDuplicates(head: ListNode | None) -> ListNode | None:
+    if not head:
+        return None
+    cts = set()
+    prev = None
+    ans = head
+    curr = head
+    while curr:
+        if curr.val in cts:
+            # remove this node
+            prev.next = curr.next
+            curr = curr.next
+        else:
+            cts.add(curr.val)
+            prev = curr
+            curr = curr.next
+
+    return ans
+
+ll = ListNode.create_linked_list([1, 1, 1, 1, 2, 4, 4, 4, 4, 5, 6])
+print(deleteDuplicates(ll))
 
 
 class DLNode:
