@@ -393,25 +393,15 @@ def findDuplicate(nums: list[int]):
     return slow
 
 def deleteDuplicates(head: ListNode | None) -> ListNode | None:
-    if not head:
-        return None
-    cts = set()
-    prev = None
-    ans = head
     curr = head
-    while curr:
-        if curr.val in cts:
-            # remove this node
-            prev.next = curr.next
-            curr = curr.next
+    while curr and curr.next:
+        if curr.val == curr.next.val:
+            curr.next = curr.next.next
         else:
-            cts.add(curr.val)
-            prev = curr
             curr = curr.next
+    return head
 
-    return ans
-
-ll = ListNode.create_linked_list([1, 1, 1, 1, 2, 4, 4, 4, 4, 5, 6])
+ll = ListNode.create_linked_list([])
 print(deleteDuplicates(ll))
 
 
