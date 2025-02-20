@@ -401,9 +401,6 @@ def deleteDuplicates(head: ListNode | None) -> ListNode | None:
             curr = curr.next
     return head
 
-ll = ListNode.create_linked_list([])
-print(deleteDuplicates(ll))
-
 
 class DLNode:
 
@@ -690,4 +687,24 @@ def removeDuplicates(nums: list[int]) -> int:
             nums[k] = nums[i]
             k += 1
     return k
+
+def topKFrequent(nums: list[int], k: int) -> list[int]:
+    counts = Counter(nums)
+
+    # map count to list of nums: all nums in that list appear count times
+    values = [[] for i in range(0, len(nums)+1)]  # index represents count
+    for n, c in counts.items():
+        values[c].append(n)
+
+    # print(values)
+    res = []
+    for i in range(len(values)-1, 0, -1):
+        if len(values[i]) != 0:
+            # this only works because the solution is guaranteed
+            res.extend(values[i])
+            k -= len(values[i])
+        if k == 0:
+            return res
+
+print(topKFrequent([1,1,1,1,1,1,1, 2, 2, 5, 2, 4, 4, 4, 5, 5, 2, 2, 3, 4, 4,4,4], k=3))
 
