@@ -115,9 +115,80 @@ def orangesRotting(grid: list[list[int]]) -> int:
 
     return max_time if fresh_oranges == 0 else -1
 
+def pacificAtlanticPrimitive(heights: list[list[int]]) -> list[list[int]]:
+    # is there an existing path from cell (r, c) to ( (0, j) or (i, 0) ) and ( (0, w-1) or (h-1, 0))?
+    height, width = len(heights), len(heights[0])
+    dirs = ((1, 0), (0, 1), (-1, 0), (0, -1))
 
-gr = [[2,1,1,2],[1,1,0,1],[0,1,1,1]]
-# gr = [[0,0]]
-for _ in gr:
-    print(_)
-print(orangesRotting(gr))
+    def check_valid(r, c):
+        stack = [(r, c)]
+        visited = set()
+        pac, atl = False, False
+        while stack and (not pac or not atl):
+            i, j = stack.pop()
+            visited.add((i, j))
+            print(f"visiting {i, j}")
+            if i == 0 or j == 0:
+                pac = True
+            if i == height - 1 or j == width - 1:
+                atl = True
+            for di, dj in dirs:
+                ni, nj = i + di, j + dj
+                if ni in range(height) and nj in range(width) and \
+                    (ni, nj) not in visited and \
+                    heights[ni][nj] <= heights[i][j]:
+                    stack.append((ni, nj))
+
+        return pac and atl
+
+    # print(f"result: {check_valid(2, 2)}")
+    res = []
+    for r in range(height):
+        for c in range(width):
+            if check_valid(r, c):
+                res.append((r, c))
+
+    return res
+
+def pacificAtlantic(heights: list[list[int]]) -> list[list[int]]:
+    height, width = len(heights), len(heights[0])
+    dirs = ((1, 0), (0, 1), (-1, 0), (0, -1))
+    # these sets represent which cells can touch the atlantic or pacific
+    pac = set()
+    atl = set()
+    for i in range(height):
+        pac.add((i, 0))
+        atl.add((i, width - 1))
+    for j in range(width):
+        pac.add((0, j))
+        atl.add((height - 1, j))
+
+    stack = list(pac)
+    while stack:
+        # add the neighbors iff they're >=
+        i, j = stack.pop()
+        pac.add((i, j))
+        # heights[i][j] = -1
+        for di, dj in dirs:
+            ni, nj = i + di, j + dj
+            if ni in range(height) and nj in range(width) and \
+                heights[ni][nj] >= heights[i][j] and \
+                (ni, nj) not in pac:
+                stack.append((ni, nj))
+
+    stack = list(atl)
+    while stack:
+        i, j = stack.pop()
+        atl.add((i, j))
+        for di, dj in dirs:
+            ni, nj = i + di, j + dj
+            if ni in range(height) and nj in range(width) and \
+                    heights[ni][nj] >= heights[i][j] and \
+                    (ni, nj) not in atl:
+                stack.append((ni, nj))
+
+    return list(atl.intersection(pac))
+
+gr = [[1,2,2,3,5],[3,2,3,4,4],[2,4,5,3,1],[6,7,1,4,5],[5,1,1,2,4]]
+for r, c in pacificAtlantic(gr):
+    print(f"{r, c}: {gr[r][c]}")
