@@ -189,6 +189,38 @@ def pacificAtlantic(heights: list[list[int]]) -> list[list[int]]:
 
     return list(atl.intersection(pac))
 
+def pacificAtlanticRecursive(heights: list[list[int]]) -> list[list[int]]:
+    height, width = len(heights), len(heights[0])
+    dirs = ((1, 0), (0, 1), (-1, 0), (0, -1))
+
+    pac = set()
+    atl = set()
+
+    def dfs(i, j, visited):
+        if (i, j) in visited:
+            return
+        visited.add((i, j))
+
+        for di, dj in dirs:
+            ni, nj = i + di, j + dj
+            if 0 <= ni < height and 0 <= nj < width:
+                if heights[ni][nj] >= heights[i][j]:
+                    dfs(ni, nj, visited)
+
+    for r in range(height):
+        dfs(r, 0, pac)
+    for c in range(width):
+        dfs(0, c, pac)
+
+    for r in range(height):
+        dfs(r, width - 1, atl)
+    for c in range(width):
+        dfs(height - 1, c, atl)
+
+    return list(atl.intersection(pac))
+
+
 gr = [[1,2,2,3,5],[3,2,3,4,4],[2,4,5,3,1],[6,7,1,4,5],[5,1,1,2,4]]
-for r, c in pacificAtlantic(gr):
-    print(f"{r, c}: {gr[r][c]}")
+# for r, c in pacificAtlantic(gr):
+#     print(f"{r, c}: {gr[r][c]}")
+print(pacificAtlanticRecursive(gr))
