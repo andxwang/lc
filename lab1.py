@@ -706,5 +706,22 @@ def topKFrequent(nums: list[int], k: int) -> list[int]:
         if k == 0:
             return res
 
-print(topKFrequent([1,1,1,1,1,1,1, 2, 2, 5, 2, 4, 4, 4, 5, 5, 2, 2, 3, 4, 4,4,4], k=3))
+def lastStoneWeight(stones: list[int]) -> int:
 
+    while len(stones) > 1:
+        stones.sort(reverse=False)
+        if stones[-1] == stones[-2]:
+            stones.pop()
+            stones.pop()
+        else:
+            if stones[-1] >= stones[-2]:
+                larger = stones.pop()
+                stones[-1] = larger - stones[-1]
+            else:
+                smaller = stones.pop()
+                stones[-1] -= smaller
+    if stones:
+        return stones[0]
+    return 0
+
+print(lastStoneWeight([7,6,7,6,9]))
