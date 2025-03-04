@@ -224,3 +224,66 @@ gr = [[1,2,2,3,5],[3,2,3,4,4],[2,4,5,3,1],[6,7,1,4,5],[5,1,1,2,4]]
 # for r, c in pacificAtlantic(gr):
 #     print(f"{r, c}: {gr[r][c]}")
 print(pacificAtlanticRecursive(gr))
+            
+
+class Node:
+    def __init__(self, val = 0, neighbors = None):
+        self.val = val
+        self.neighbors = neighbors if neighbors is not None else []
+
+def create_graph(adj_list):
+    if not adj_list:
+        return None
+    
+    node_map = {}  # Maps value to Node
+    
+    # Create nodes
+    for i in range(1, len(adj_list) + 1):
+        node_map[i] = Node(i)
+    
+    # Assign neighbors
+    for i in range(len(adj_list)):
+        node = node_map[i + 1]
+        node.neighbors = [node_map[neighbor] for neighbor in adj_list[i]]
+    
+    return node_map[1]  # Return the reference to the first node
+
+def print_graph(node):
+    if not node:
+        print("Empty graph")
+        return
+    
+    visited = set()
+    queue = [node]
+    
+    while queue:
+        current = queue.pop(0)
+        if current.val in visited:
+            continue
+        visited.add(current.val)
+        print(f"Node {current.val}: {[neighbor.val for neighbor in current.neighbors]}")
+        queue.extend(current.neighbors)
+
+
+def cloneGraph(node: Node | None) -> Node | None:
+    if not node:
+        return None
+    
+    node_map = {node: Node(node.val)}  # map old to new node
+    stack = [node]
+    
+    while stack:
+        curr = stack.pop()
+        for nbor in curr.neighbors:
+            if nbor not in node_map:
+                node_map[nbor] = Node(nbor.val)
+                stack.append(nbor)
+            node_map[curr].neighbors.append(node_map[nbor])
+            
+    return node_map[node]
+
+
+graph = create_graph([[2,3], [1], [1]])
+print_graph(graph)
+cloned = cloneGraph(graph)
+print_graph(cloned)

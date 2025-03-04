@@ -55,6 +55,19 @@ class TreeNode:
         return [first_line, second_line] + lines, n + m + u, max(p, q) + 2, n + u // 2
 
 
+def sortedArrayToBST(nums: list[int]) -> TreeNode | None:
+    if len(nums) == 0:
+        return None
+    if len(nums) == 1:
+        return TreeNode(nums[0])
+    m = len(nums) // 2  # left
+    root = TreeNode(nums[m])
+    root.left = sortedArrayToBST(nums[:m])
+    root.right = sortedArrayToBST(nums[m+1:])
+            
+    return root
+
+
 def invertTree(root: TreeNode | None) -> TreeNode | None:
     if root is None:
         return None
@@ -330,37 +343,28 @@ def delNodes(root: TreeNode | None, to_delete: list[int]) -> list[TreeNode]:
     aux(root, True)
     return result
 
-def countNodes(root: TreeNode | None) -> int:
-    """every level, except possibly the last, is completely filled in a complete binary tree,
-    and all nodes in the last level are as far left as possible"""
+def hasPathSum(root: TreeNode | None, targetSum: int) -> bool:
     if not root:
-        return 0
+        return False
+    
+    def aux(node: TreeNode | None, currSum: int):
+        if not node.left and not node.right:
+            # leaf node
+            return currSum + node.val == targetSum
+        
+        return (node.left is not None and aux(node.left, node.val + currSum)) or \
+            (node.right is not None and aux(node.right, node.val + currSum))
+                
+    return aux(root, 0)
 
-    def left_height(node: TreeNode | None):
-        if not node:
-            return 0
-        return 1 + left_height(node.left)
-
-    def right_height(node: TreeNode | None):
-        if not node:
-            return 0
-        return 1 + right_height(node.right)
-
-    lh = left_height(root)
-    rh = right_height(root)
-
-    if lh == rh:
-        print(f"{'='*10} balanced tree {'='*10}")
-        print(root)
-        return 2 ** lh - 1
-    else:
-        print(f"{'='*10} unbalanced tree {'='*10}")
-        print(root)
-        pass
-
-
-    return 1 + countNodes(root.left) + countNodes(root.right)
-
+def hasPathSumAlt(root: TreeNode | None, targetSum: int) -> bool:
+    if not root:
+        return False
+    
+    if not root.left and not root.right:
+        return root.val == targetSum
+    
+    return hasPathSumAlt(root.left, targetSum - root.val) or hasPathSumAlt(root.right, targetSum - root.val)
 
 
 r0 = TreeNode(1)
@@ -392,7 +396,10 @@ r2.right = TreeNode(3)
 r2.left.left = TreeNode(4)
 r2.left.right = TreeNode(5)
 r2.right.left = TreeNode(6)
-# r2.right.right = TreeNode(7)
-print(r2)
+r2.right.right = TreeNode(7)
+# print(r2)
 
-print(countNodes(r2))
+r3 = TreeNode(1)
+r3.left = TreeNode(2)
+# print(r3)
+
