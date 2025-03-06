@@ -220,10 +220,10 @@ def pacificAtlanticRecursive(heights: list[list[int]]) -> list[list[int]]:
     return list(atl.intersection(pac))
 
 
-gr = [[1,2,2,3,5],[3,2,3,4,4],[2,4,5,3,1],[6,7,1,4,5],[5,1,1,2,4]]
+# gr = [[1,2,2,3,5],[3,2,3,4,4],[2,4,5,3,1],[6,7,1,4,5],[5,1,1,2,4]]
 # for r, c in pacificAtlantic(gr):
 #     print(f"{r, c}: {gr[r][c]}")
-print(pacificAtlanticRecursive(gr))
+# print(pacificAtlanticRecursive(gr))
             
 
 class Node:
@@ -282,8 +282,50 @@ def cloneGraph(node: Node | None) -> Node | None:
             
     return node_map[node]
 
+from typing import List
+def islandsAndTreasure(grid: List[List[int]]) -> None:
+    height, width = len(grid), len(grid[0])
+    dirs = [(-1, 0), (0, -1), (1, 0), (0, 1)]
+    queue = deque()
+    visited = set()
+    
+    for i in range(height):
+        for j in range(width):
+            if grid[i][j] == 0:
+                queue.append((i, j, 0))
 
-graph = create_graph([[2,3], [1], [1]])
-print_graph(graph)
-cloned = cloneGraph(graph)
-print_graph(cloned)
+    visited = set()
+    
+    while queue:
+        i, j, d = queue.popleft()
+        visited.add((i, j))
+        grid[i][j] = min(grid[i][j], d)
+        for di, dj in dirs:
+            ni, nj = i + di, j + dj
+            if 0 <= ni < height and 0 <= nj < width and \
+                grid[ni][nj] > 0 and (ni, nj) not in visited:
+                queue.append((ni, nj, d + 1))
+    
+
+                
+gr = [
+  [2147483647,-1,0,2147483647],
+  [2147483647,2147483647,2147483647,-1],
+  [2147483647,-1,2147483647,-1],
+  [0,-1,2147483647,2147483647]
+]
+
+# gr = [[2147483647,2147483647,2147483647],[2147483647,-1,2147483647],[0,2147483647,2147483647]]
+
+# expected = [
+#   [3,-1,0,1],
+#   [2,2,1,-1],
+#   [1,-1,2,-1],
+#   [0,-1,3,4]
+# ]
+
+# for _ in gr:
+#     print(_)
+islandsAndTreasure(gr)
+for _ in gr:
+    print(_)
