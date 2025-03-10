@@ -38,5 +38,18 @@ class KthLargest:
             heapq.heappop(self.minHeap)
         return self.minHeap[0]  # retrieve min
 
-kon = KthLargest(7, [5, 4, 7, 2, 4, 3, 9])
-print(kon.add(1))
+def lastStoneWeight(stones: List[int]) -> int:
+    while len(stones) >= 2:
+        heapq._heapify_max(stones)
+        a = heapq.heappop(stones)
+        heapq._heapify_max(stones)
+        b = heapq.heappop(stones)
+        print(a, b)
+        if a != b:
+            heapq.heappush(stones, abs(a - b))
+            
+    if stones:
+        return stones[0]
+    return 0
+        
+print(lastStoneWeight([10,4,2,10]))
