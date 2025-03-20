@@ -52,4 +52,3 @@ def lastStoneWeight(stones: List[int]) -> int:
         return stones[0]
     return 0
         
-print(lastStoneWeight([10,4,2,10]))

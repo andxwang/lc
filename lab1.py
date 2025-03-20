@@ -724,4 +724,20 @@ def lastStoneWeight(stones: list[int]) -> int:
         return stones[0]
     return 0
 
-print(lastStoneWeight([7,6,7,6,9]))
+from collections import Counter
+def distinctAverages(nums: List[int]) -> int:
+    nums.sort()
+    print(nums)
+    l = 0
+    r = len(nums) - 1
+    avgs = set()
+    while l < r:
+        print(nums[l], nums[r])
+        avgs.add(int((nums[r] + nums[l]) / 2 * 10))  # could even do * 5
+        l += 1
+        r -= 1
+    
+    print(avgs)
+    return len(avgs)
+
+print(distinctAverages([0,2,6,7,2,2,22,33,44,55,66,6,66,66,66,99]))
