@@ -725,7 +725,7 @@ def lastStoneWeight(stones: list[int]) -> int:
     return 0
 
 from collections import Counter
-def distinctAverages(nums: List[int]) -> int:
+def distinctAverages(nums: list[int]) -> int:
     nums.sort()
     print(nums)
     l = 0
@@ -740,4 +740,38 @@ def distinctAverages(nums: List[int]) -> int:
     print(avgs)
     return len(avgs)
 
-print(distinctAverages([0,2,6,7,2,2,22,33,44,55,66,6,66,66,66,99]))
+def addBinary(a: str, b: str) -> str:
+    i = 0
+    carry = 0
+    res = []
+    while i < min(len(a), len(b)):
+        s = int(a[-i - 1]) + int(b[-i - 1]) + carry
+
+        if s > 1:
+            carry = 1
+            s -= 2
+
+        else:
+            carry = 0
+        res.append(str(s))
+        i += 1
+
+    longer = a if len(a) > len(b) else b
+    while i < len(longer):
+        s = carry + int(longer[-i - 1])
+        if s > 1:
+            carry = 1
+            s -= 2
+        else:
+            carry = 0
+        res.append(str(s))
+        i += 1
+
+    if carry:
+        res.append('1')
+
+    return ''.join(reversed(res))
+
+
+
+print(addBinary('111', '1111'))
