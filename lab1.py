@@ -772,6 +772,37 @@ def addBinary(a: str, b: str) -> str:
 
     return ''.join(reversed(res))
 
-
-
-print(addBinary('111', '1111'))
+def reverseVowels(s: str) -> str:
+    _vowels = set("aeiouAEIOU")
+    targets = []
+    for c in reversed(s):
+        if c in _vowels:
+            targets.append(c)
+    
+    result = []
+    v = 0
+    for i, c in enumerate(s):
+        if s[i] in _vowels:
+            result.append(targets[v])
+            v += 1
+        else:
+            result.append(c)
+            
+    return ''.join(result)
+    
+def convertTime(current: str, correct: str) -> int:
+    current = [int(s) for s in current.split(':')]
+    correct = [int(s) for s in correct.split(':')]
+    units = [60, 15, 5, 1]
+    diff = correct[0] * 60 + correct[1] - (current[0] * 60 + current[1])
+    
+    total = 0
+    for unit in units:
+        # amt = diff // unit
+        # diff = diff % unit
+        amt, diff = divmod(diff, unit)
+        total += amt
+    
+    return total
+    
+print(convertTime('02:02', '02:03'))
