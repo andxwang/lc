@@ -306,26 +306,59 @@ def islandsAndTreasure(grid: List[List[int]]) -> None:
                 grid[ni][nj] > 0 and (ni, nj) not in visited:
                 queue.append((ni, nj, d + 1))
     
+def surroundedRegions(board: List[List[str]]) -> None:
+    """
+    Do not return anything, modify board in-place instead.
+    """
+    height, width = len(board), len(board[0])
+    dirs = [(0, 1), (1, 0), (-1, 0), (0, -1)]
+    
+    def dfs(stack, fill_char):
+        while stack:
+            i, j = stack.pop()
+            board[i][j] = fill_char
+            for di, dj in dirs:
+                ni, nj = i + di, j + dj
+                if 0 <= ni < height and 0 <= nj < width:
+                    if board[ni][nj] == 'O':
+                        stack.append((ni, nj))
 
-                
-gr = [
-  [2147483647,-1,0,2147483647],
-  [2147483647,2147483647,2147483647,-1],
-  [2147483647,-1,2147483647,-1],
-  [0,-1,2147483647,2147483647]
-]
+    # first add only border cells that are 'O' to stack, including top, bottom, left, right
+    border_cells = set()
+    for r in range(height):
+        if board[r][0] == 'O':
+            border_cells.add((r, 0))
+        if board[r][width - 1] == 'O':
+            border_cells.add((r, width - 1))
+    for c in range(width):
+        if board[0][c] == 'O':
+            border_cells.add((0, c))
+        if board[height - 1][c] == 'O':
+            border_cells.add((height - 1, c))
+    
+    stack = list(border_cells)
+    
+    # first run: mark border cell connected components with 'T'
+    # then, run again and mark all other 'O' cells with 'X'
+    while stack:
+        dfs(stack, 'T')
+        
+    # now, run again and mark all 'O' cells with 'X'
+    # and all 'T' cells with 'O'
+    for r in range(height):
+        for c in range(width):
+            if board[r][c] == 'O':
+                board[r][c] = 'X'
+            elif board[r][c] == 'T':
+                board[r][c] = 'O'
 
-# gr = [[2147483647,2147483647,2147483647],[2147483647,-1,2147483647],[0,2147483647,2147483647]]
+    return
 
-# expected = [
-#   [3,-1,0,1],
-#   [2,2,1,-1],
-#   [1,-1,2,-1],
-#   [0,-1,3,4]
-# ]
-
-# for _ in gr:
-#     print(_)
-islandsAndTreasure(gr)
-for _ in gr:
+b = [["X","X","X","X"],["X","O","O","X"],["X","O","O","X"],["X","O","X","X"]]
+# b = [["X","X","X","X"],["X","O","O","X"],["X","X","O","X"],["X","O","X","X"]]
+for _ in b:
+    print(_)
+surroundedRegions(b)
+print("After:")
+for _ in b:
     print(_)
