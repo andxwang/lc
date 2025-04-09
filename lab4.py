@@ -354,11 +354,59 @@ def surroundedRegions(board: List[List[str]]) -> None:
 
     return
 
-b = [["X","X","X","X"],["X","O","O","X"],["X","O","O","X"],["X","O","X","X"]]
-# b = [["X","X","X","X"],["X","O","O","X"],["X","X","O","X"],["X","O","X","X"]]
-for _ in b:
-    print(_)
-surroundedRegions(b)
-print("After:")
-for _ in b:
-    print(_)
+from collections import deque
+def canFinish(numCourses: int, prerequisites: List[List[int]]) -> bool:
+    """topological sort graph problem"""
+    count = 0
+    indegrees = {}
+    courses = []
+    for _ in range(numCourses):
+        indegrees[_] = 0
+        courses.append([])
+    for a, b in prerequisites:
+        indegrees[a] += 1
+        courses[b].append(a)
+        
+    queue = deque()
+    for k, v in indegrees.items():
+        if v == 0:
+            queue.append(k)
+        
+    while queue:
+        n = queue.popleft()
+        if indegrees[n] == 0:
+            count += 1
+            # decrease n's neighbor's indegrees by 1
+            for nbor in courses[n]:
+                indegrees[nbor] -= 1
+                if indegrees[nbor] == 0:
+                    queue.append(nbor)
+        
+    return count == numCourses
+            
+def findOrder(numCourses: int, prerequisites: List[List[int]]) -> List[int]:
+    topo_sort = []
+    indegrees = [0] * numCourses
+    courses = [[] for _ in range(numCourses)]
+    
+    for post, pre in prerequisites:
+        courses[pre].append(post)
+        indegrees[post] += 1
+    
+    queue = deque()
+    for i, n in enumerate(indegrees):
+        if n == 0:
+            queue.append(i)
+            
+    while queue:
+        n = queue.popleft()
+        topo_sort.append(n)
+        # "remove" from graph
+        for nbor in courses[n]:
+            indegrees[nbor] -= 1
+            if indegrees[nbor] == 0:
+                queue.append(nbor)
+                
+    return topo_sort #if len(topo_sort) == numCourses else []
+
+print(findOrder(4,[[0,1],[1,2],[2,3],[3,1]]))
