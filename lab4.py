@@ -409,4 +409,66 @@ def findOrder(numCourses: int, prerequisites: List[List[int]]) -> List[int]:
                 
     return topo_sort #if len(topo_sort) == numCourses else []
 
-print(findOrder(4,[[0,1],[1,2],[2,3],[3,1]]))
+def validTree(n: int, edges: List[List[int]]) -> bool:
+    # ensure min comes before max in edge tuple
+    edges = [(min(a, b), max(a, b)) for (a, b) in edges]
+    graph = [set() for _ in range(n)]
+    for a, b in edges:
+        graph[a].add(b)
+        graph[b].add(a)
+        
+    # first check connectivity
+    visited = set()
+    stack = [0]
+    while stack:
+        x = stack.pop()
+        visited.add(x)
+        for nbor in graph[x]:
+            if nbor not in visited:
+                stack.append(nbor)
+    if len(visited) != n:
+        return False
+    
+    visited_nodes = set()
+    visited_edges = set()
+    stack = [0]
+    while stack:
+        x = stack.pop()
+        if x in visited_nodes:
+            return False
+        visited_nodes.add(x)
+        for nbor in graph[x]:
+            # check edges
+            nbor_edge = (min(x, nbor), max(x, nbor))
+            if nbor_edge not in visited_edges:
+                visited_edges.add(nbor_edge)
+                stack.append(nbor)
+    return True
+    
+    
+def countComponents(n: int, edges: List[List[int]]) -> int:
+    visited = set()
+    graph = [[] for _ in range(n)]
+    for (a, b) in edges:
+        graph[a].append(b)
+        graph[b].append(a)
+    
+    def bfs(i):
+        queue = deque([i])
+        visited.add(i)
+        while queue:
+            x = queue.popleft()
+            visited.add(x)
+            for nbor in graph[x]:
+                if nbor not in visited:
+                    queue.append(nbor)
+            
+    ccs = 0
+    for i in range(n):
+        if i not in visited:
+            ccs += 1
+            bfs(i)
+            
+    return ccs
+
+print(countComponents(6, [[0,1], [1,2], [2,3], [4,5]]))
