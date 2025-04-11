@@ -471,4 +471,23 @@ def countComponents(n: int, edges: List[List[int]]) -> int:
             
     return ccs
 
-print(countComponents(6, [[0,1], [1,2], [2,3], [4,5]]))
+
+def validPath(n: int, edges: List[List[int]], source: int, destination: int) -> bool:
+    graph = [[] for _ in range(n)]
+    for u, v in edges:
+        graph[u].append(v)
+        graph[v].append(u)
+        
+    visited = set()
+    stack = [source]
+    while stack:
+        i = stack.pop()
+        if i == destination:
+            return True
+        visited.add(i)
+        for nbor in graph[i]:
+            if nbor not in visited:
+                stack.append(nbor)
+                
+    return False
+
