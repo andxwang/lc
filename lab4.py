@@ -473,21 +473,23 @@ def countComponents(n: int, edges: List[List[int]]) -> int:
 
 
 def validPath(n: int, edges: List[List[int]], source: int, destination: int) -> bool:
-    graph = [[] for _ in range(n)]
+    graph = defaultdict(list)
     for u, v in edges:
         graph[u].append(v)
         graph[v].append(u)
-        
-    visited = set()
-    stack = [source]
-    while stack:
-        i = stack.pop()
-        if i == destination:
+    
+    visited = set([source])
+    queue = deque([source])
+    
+    while queue:
+        node = queue.popleft()
+        if node == destination:
             return True
-        visited.add(i)
-        for nbor in graph[i]:
-            if nbor not in visited:
-                stack.append(nbor)
-                
+        for neighbor in graph[node]:
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append(neighbor)
+    
     return False
+
 
