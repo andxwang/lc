@@ -805,4 +805,38 @@ def convertTime(current: str, correct: str) -> int:
     
     return total
     
-print(convertTime('02:02', '02:03'))
+def isPalindromePrimitive(head: ListNode | None) -> bool:
+    vals = []
+    curr = head
+    while curr:
+        vals.append(curr.val)
+        curr = curr.next
+        
+    l, r = 0, len(vals) - 1
+    while l < r:
+        if vals[l] != vals[r]:
+            return False
+        l += 1
+        r -= 1
+        
+    return True
+
+def isPalindrome(head: ListNode | None) -> bool:
+    slow, fast, prev = head, head, None
+    while fast and fast.next:
+        slow = slow.next
+        fast = fast.next.next
+    prev, slow, prev.next = slow, slow.next, None  # have to set prev.next = None to prevent inf loop
+    while slow:
+        slow.next, prev, slow = prev, slow, slow.next  # in order left to right
+        
+    # second half of ll is now reversed, and prev points to the last node
+    x, y = head, prev
+    while y:
+        if x.val != y.val:
+            return False
+        x, y = x.next, y.next
+        
+    return True
+
+print(isPalindrome(ListNode.create_linked_list([1, 1, 3, 5, 3, 1, 1])))
