@@ -492,4 +492,36 @@ def validPath(n: int, edges: List[List[int]], source: int, destination: int) -> 
     
     return False
 
-
+def findRedundantConnection(edges: List[List[int]]) -> List[int]:
+    """edges is an undirected graph that started as a tree, but now has
+    one extra edge. Find the extra edge. It's the last edge in edges that creates a cycle."""
+    n = len(edges)
+    indegrees =  [0] * (n + 1)
+    graph = [[] for _ in range(n + 1)]
+    for a, b in edges:
+        graph[a].append(b)
+        graph[b].append(a)
+        indegrees[a] += 1
+        indegrees[b] += 1
+    
+    queue = deque()
+    for i in range(1, n + 1):
+        if indegrees[i] == 1:
+            queue.append(i)
+            
+    while queue:
+        x = queue.popleft()
+        indegrees[x] -= 1
+        for nbor in graph[x]:
+            indegrees[nbor] -= 1
+            if indegrees[nbor] == 1:
+                queue.append(nbor)
+                
+    for a, b in reversed(edges):
+        if indegrees[a] == 2 and indegrees[b]:
+            return [a, b]
+    return []
+        
+        
+print(findRedundantConnection([[1,2],[2,3],[3,4],[4,1],[1,5]]))
+        
