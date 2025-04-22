@@ -523,5 +523,35 @@ def findRedundantConnection(edges: List[List[int]]) -> List[int]:
     return []
         
         
-print(findRedundantConnection([[1,2],[2,3],[3,4],[4,1],[1,5]]))
-        
+def ladderLength(beginWord: str, endWord: str, wordList: List[str]) -> int:
+    """
+    approach:
+    - create a graph with each word being a node
+    - edges exist between nodes if edit dist == 1
+    - find shortest path: how?
+    """
+    word_set = set(wordList)
+    word_set.add(beginWord)
+    if endWord not in word_set:
+        return 0
+    
+    # if beginWord in word_set:
+    #     word_set.remove(beginWord)
+
+    queue = deque([(beginWord, 1)])  # (current word, transformation steps)
+    
+    while queue:
+        word, d = queue.popleft()
+        if word == endWord:
+            return d
+        for i in range(len(word)):
+            for c in 'abcdefghijklmnopqrstuvwxyz':
+                candidate = word[:i] + c + word[i+1:]
+                if candidate in word_set:
+                    # we know this candidate has edit dist 1
+                    queue.append((candidate, d + 1))
+                    word_set.remove(candidate)
+                    
+    return 0
+    
+print(ladderLength(beginWord='hit', endWord='cog', wordList=["dit","dot","dog","lot","cit","log","cog"]))        
