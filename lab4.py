@@ -1,3 +1,5 @@
+from collections import defaultdict, deque
+
 def numIslands(grid: list[list[str]]) -> int:
     # count connected components
     # doesn't use visited set because modifies grid in-place
@@ -535,23 +537,29 @@ def ladderLength(beginWord: str, endWord: str, wordList: List[str]) -> int:
     if endWord not in word_set:
         return 0
     
-    # if beginWord in word_set:
-    #     word_set.remove(beginWord)
-
+    # generic-state map
+    generic = defaultdict(list)
+    for word in word_set:
+        for i in range(len(beginWord)):
+            generic[word[:i] + '*' + word[i+1:]].append(word)            
+    
     queue = deque([(beginWord, 1)])  # (current word, transformation steps)
+    visited = set([beginWord])
     
     while queue:
         word, d = queue.popleft()
-        if word == endWord:
-            return d
         for i in range(len(word)):
-            for c in 'abcdefghijklmnopqrstuvwxyz':
-                candidate = word[:i] + c + word[i+1:]
-                if candidate in word_set:
-                    # we know this candidate has edit dist 1
-                    queue.append((candidate, d + 1))
-                    word_set.remove(candidate)
+            template = word[:i] + '*' + word[i+1:]
+            # print(template, generic.get(template))
+            for nbor in generic[template]:
+                if nbor == endWord:
+                    return d + 1
+                if nbor not in visited:
+                    visited.add(nbor)
+                    queue.append((nbor, d + 1))
+            # clear the generic map to avoid cycles
+            generic[template] = []
                     
     return 0
     
-print(ladderLength(beginWord='hit', endWord='cog', wordList=["dit","dot","dog","lot","cit","log","cog"]))        
+print(ladderLength(beginWord='hit', endWord='cog', wordList=["dit","dot","dog","lot","cit","log","cog"]))
