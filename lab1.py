@@ -839,4 +839,15 @@ def isPalindrome(head: ListNode | None) -> bool:
         
     return True
 
-print(isPalindrome(ListNode.create_linked_list([1, 1, 3, 5, 3, 1, 1])))
+def validPalindromeII(s: str) -> bool:
+    """check if string is palindrome after deleting at most one character from it"""
+    l, r = 0, len(s) - 1
+    while l <= r:
+        if s[l] != s[r]:
+            a = s[l+1 : r+1]  # exclude l: ..._xxr...
+            b = s[l : r]  # exclude r: ...xx_...
+            return a == a[::-1] or b == b[::-1]
+        l += 1
+        r -= 1
+    return True
+        
