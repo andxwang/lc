@@ -27,5 +27,22 @@ def minCostClimbingStairs2(cost: List[int]) -> int:
     
     return min(a, b)
 
+def rob(nums: List[int]) -> int:
+    n = len(nums)
+    if n == 1:
+        return nums[0]
+    
+    memoiz = [0] * n
+    memoiz[-1] = nums[-1]
+    memoiz[-2] = nums[-2]
+    
+    for i in range(n - 3, -1, -1):
+        # pick the most between values at i + 2 and i + 3, if in bounds
+        if i + 3 < n:
+            memoiz[i] = nums[i] + max(memoiz[i + 2], memoiz[i + 3])
+        else:
+            memoiz[i] = nums[i] + memoiz[i + 2]
+        
+    return max(memoiz[0], memoiz[1])
 
-print(minCostClimbingStairs2([7,8,2,2,3,4,23,2,9,12,26]))
+print(rob([2,7,9,3,1]))
