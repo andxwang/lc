@@ -366,6 +366,25 @@ def hasPathSumAlt(root: TreeNode | None, targetSum: int) -> bool:
     
     return hasPathSumAlt(root.left, targetSum - root.val) or hasPathSumAlt(root.right, targetSum - root.val)
 
+def evaluateTree(root: TreeNode) -> bool:
+    if root.val == 0 or root.val == 1:
+        return bool(root.val)
+    
+    if root.val == 2:
+        return evaluateTree(root.left) or evaluateTree(root.right)
+    
+    if root.val == 3:
+        return evaluateTree(root.left) and evaluateTree(root.right)
+    
+r = TreeNode(2)
+r.left = TreeNode(1)
+r.right = TreeNode(3)
+r.right.left = TreeNode(0)
+r.right.right = TreeNode(1)
+
+print(r)
+print(evaluateTree(r))
+        
 
 r0 = TreeNode(1)
 r0.left = TreeNode(2)
