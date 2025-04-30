@@ -45,3 +45,28 @@ def robO1Space(nums: List[int]) -> int:
         curr = max(x + prev2, prev1)
         prev2, prev1 = prev1, curr
     return prev1
+
+def robII(nums: List[int]):
+    n = len(nums)
+    if n == 1:
+        return nums[0]
+    
+    def aux(sublist: List[int]):
+        m = len(sublist)
+        if m == 0:
+            return 0
+        if m == 1:
+            return sublist[0]
+        if m == 2:
+            return max(sublist)
+        memoiz = [0] * (m + 2)
+        for i in range(m - 1, -1, -1):
+            # pick the most between this house + two down, or just one down
+            memoiz[i] = max(nums[i] + memoiz[i + 2], memoiz[i + 1])
+            
+        return memoiz[0]
+    
+    results = [aux(nums[:n-1]), aux(nums[1:])]
+    return max(results)
+
+print(robII([2, 3, 2]))
