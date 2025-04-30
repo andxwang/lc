@@ -32,17 +32,10 @@ def rob(nums: List[int]) -> int:
     if n == 1:
         return nums[0]
     
-    memoiz = [0] * n
-    memoiz[-1] = nums[-1]
-    memoiz[-2] = nums[-2]
-    
-    for i in range(n - 3, -1, -1):
-        # pick the most between values at i + 2 and i + 3, if in bounds
-        if i + 3 < n:
-            memoiz[i] = nums[i] + max(memoiz[i + 2], memoiz[i + 3])
-        else:
-            memoiz[i] = nums[i] + memoiz[i + 2]
+    memoiz = [0] * (n + 2)
+    for i in range(n - 1, -1, -1):
+        # pick the most between this house + two down, or just one down
+        memoiz[i] = max(nums[i] + memoiz[i + 2], memoiz[i + 1])
         
-    return max(memoiz[0], memoiz[1])
+    return memoiz[0]
 
-print(rob([2,7,9,3,1]))
