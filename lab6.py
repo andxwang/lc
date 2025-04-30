@@ -39,3 +39,9 @@ def rob(nums: List[int]) -> int:
         
     return memoiz[0]
 
+def robO1Space(nums: List[int]) -> int:
+    prev1, prev2 = 0, 0  # dp[i+1], dp[i+2]
+    for x in reversed(nums):
+        curr = max(x + prev2, prev1)
+        prev2, prev1 = prev1, curr
+    return prev1
