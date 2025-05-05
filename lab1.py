@@ -850,4 +850,25 @@ def validPalindromeII(s: str) -> bool:
         l += 1
         r -= 1
     return True
-        
+
+def diagonalPrime(nums: list[list[int]]) -> int:
+    def _is_prime(n):
+        for i in range(2, n // 2):
+            if n % i == 0:
+                return False
+        return True
+    
+    curr = 0
+    h = len(nums)
+    for i in range(h):
+        x = nums[i][i]
+        if x > curr and _is_prime(x):
+            curr = x
+        x = nums[i][h - i - 1]
+        if x > curr and _is_prime(x):
+            curr = x
+
+    return curr
+
+print(diagonalPrime([[1,2,3],[5,17,7],[9,11,10]]))
+
