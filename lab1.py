@@ -872,3 +872,29 @@ def diagonalPrime(nums: list[list[int]]) -> int:
 
 print(diagonalPrime([[1,2,3],[5,17,7],[9,11,10]]))
 
+def canThreePartsEqualSum(arr: list[int]) -> bool:
+    """Constraints:
+    3 <= arr.length <= 5 * 104
+    -104 <= arr[i] <= 104
+    """
+    s = sum(arr)
+    if s % 3 != 0:
+        return False
+    
+    goal_sum = s // 3
+    left_sum = 0
+    for l in range(len(arr) - 2):
+        left_sum += arr[l]
+        if left_sum == goal_sum:
+            mid_sum = 0
+            for r in range(l + 1, len(arr) - 1):
+                mid_sum += arr[r]
+                if mid_sum == goal_sum:
+                    if sum(arr[r + 1:]) == goal_sum:
+                        return True
+            
+    return False
+
+print(canThreePartsEqualSum([1,-1,1,-1]))
+
+        
