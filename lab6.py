@@ -95,30 +95,26 @@ def longestPalindrome(s: str) -> str:
 
 def longestPalindromeTwoPTr(s: str) -> str:
     ans = ''
-    ansL = 0
     
-    # odd length
-    for i in range(len(s)):
-        l, r = i, i
+    def _check_palindrome(ans_t, ansL, l, r):
         # step outwards until find a palindrome substring
         while l >= 0 and r < len(s) and s[l] == s[r]:
             if r - l + 1 > ansL:
                 ansL = r - l + 1
-                ans = s[l: r + 1]
+                ans_t = s[l: r + 1]
             l -= 1
             r += 1
+        return ans_t
+    
+    # odd length
+    for i in range(len(s)):
+        ans = _check_palindrome(ans, len(ans), i, i)
             
     # even length
     for i in range(len(s) - 1):
-        l, r = i, i + 1
-        while l >= 0 and r < len(s) and s[l] == s[r]:
-            if r - l + 1 > ansL:
-                ansL = r - l + 1
-                ans = s[l: r + 1]
-            l -= 1
-            r += 1
+        ans = _check_palindrome(ans, len(ans), i, i + 1)
             
     return ans
             
 
-print('ANSWER:', longestPalindromeTwoPTr('cbbd'))
+print('ANSWER:', longestPalindromeTwoPTr('rac33car'))
