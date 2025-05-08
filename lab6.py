@@ -69,4 +69,29 @@ def robII(nums: List[int]):
     results = [aux(nums[:n-1]), aux(nums[1:])]
     return max(results)
 
-print(robII([2, 3, 2]))
+def longestPalindrome(s: str) -> str:
+    n = len(s)
+    ans = s[0]
+    dp = [[False] * len(s) for _ in range(n)]
+    for i in range(n):
+        dp[i][i] = True
+        if i < n - 1:
+            if s[i] == s[i + 1]:
+                dp[i][i + 1] = True
+                ans = s[i: i + 2]
+            
+    for subl in range(3, n + 1):
+        for i in range(0, n - subl + 1):
+            j = i + subl - 1  # j is inclusive right index
+            substr = s[i:j+1]
+            print(i, j, substr)
+            if s[i] == s[j] and dp[i + 1][j - 1]:
+                dp[i][j] = True
+                ans = s[i:j + 1] if j - i + 1 > len(ans) else ans
+            else:
+                dp[i][j] = False
+                                
+    return ans
+            
+
+print('ANSWER:', longestPalindrome('cbbd'))
