@@ -637,6 +637,24 @@ def reverseBetween(head: ListNode | None, left: int, right: int) -> ListNode | N
         
     return head
 
+def removeElements(head: ListNode | None, val: int) -> ListNode | None:
+    if head is None:
+        return None
+    
+    prehead = ListNode(0)
+    prehead.next = head
+    
+    prev = prehead
+    curr = head
+    while curr:
+        if curr.val == val:
+            prev.next = curr.next
+        else:
+            prev = curr
+        curr = curr.next
+        
+    return prehead.next
+
 
 def findMaxFish(grid: list[list[int]]) -> int:
     height, width = len(grid), len(grid[0])
@@ -870,8 +888,6 @@ def diagonalPrime(nums: list[list[int]]) -> int:
 
     return curr
 
-print(diagonalPrime([[1,2,3],[5,17,7],[9,11,10]]))
-
 def canThreePartsEqualSum(arr: list[int]) -> bool:
     """Constraints:
     3 <= arr.length <= 5 * 104
@@ -894,7 +910,4 @@ def canThreePartsEqualSum(arr: list[int]) -> bool:
                         return True
             
     return False
-
-print(canThreePartsEqualSum([1,-1,1,-1]))
-
-        
+    
