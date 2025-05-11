@@ -96,7 +96,7 @@ def longestPalindrome(s: str) -> str:
 def longestPalindromeTwoPTr(s: str) -> str:
     ans = ''
     
-    def _check_palindrome(ans_t, ansL, l, r):
+    def _expand_around_center(ans_t, ansL, l, r):
         # step outwards until find a palindrome substring
         while l >= 0 and r < len(s) and s[l] == s[r]:
             if r - l + 1 > ansL:
@@ -108,13 +108,55 @@ def longestPalindromeTwoPTr(s: str) -> str:
     
     # odd length
     for i in range(len(s)):
-        ans = _check_palindrome(ans, len(ans), i, i)
+        ans = _expand_around_center(ans, len(ans), i, i)
             
     # even length
     for i in range(len(s) - 1):
-        ans = _check_palindrome(ans, len(ans), i, i + 1)
+        ans = _expand_around_center(ans, len(ans), i, i + 1)
             
     return ans
-            
 
-print('ANSWER:', longestPalindromeTwoPTr('rac33car'))
+def countSubstrings(s: str) -> int:
+    """Given a string s, return the number of palindromic substrings in it."""
+    ans = [0]
+    def _expand_around_center(l, r):
+        # for some reason on leetcode, it's slower to call this function twice 
+        # instead of copying the code twice
+        while l >= 0 and r < len(s) and s[l] == s[r]:
+            ans[0] += 1
+            l -= 1
+            r += 1
+    
+    # skip one-char palindromes
+    ans[0] += len(s)
+    for i in range(len(s)):
+        _expand_around_center(i, i + 2)  # odd
+        _expand_around_center(i, i + 1)  # even
+        
+    return ans[0]        
+    
+    # DP approach: still slower on leetcode
+        # n = len(s)
+        # ans = [n]
+        # dp = [[False] * n for _ in range(n)]
+        # for i in range(n):
+        #     dp[i][i] = True
+        #     if i < n - 1:
+        #         if s[i] == s[i + 1]:
+        #             dp[i][i + 1] = True
+        #             ans[0] += 1
+                    
+        # for d in range(2, n):
+        #     for i in range(n - d):
+        #         j = i + d
+        #         # print(i, j)
+        #         # s[i:j] is a palindrome iff s[i+1: j-1] is a palindrome (inner str, inclusive indexes)
+        #         if s[i] == s[j] and dp[i+1][j-1]:
+        #             dp[i][j] = True
+        #             ans[0] += 1
+        #             # print('\tyey')
+                    
+        # return ans[0]
+
+
+print(countSubstrings('abbcd'))
