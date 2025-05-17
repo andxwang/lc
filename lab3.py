@@ -229,3 +229,51 @@ def letterCombinations(digits: str) -> list[str]:
         
     return res
 
+from collections import Counter
+def wordSearch(board: list[list[str]], word: str) -> bool:
+    m, n = len(board), len(board[0])
+    if len(word) > m * n:
+        return False
+    
+    # validate board based on char freqs
+    board_freqs = Counter(c for subl in board for c in subl)
+    word_char_freqs = Counter(word)
+    for k in word_char_freqs:
+        if word_char_freqs[k] > board_freqs[k]:
+            return False
+    
+    dirs = ((0, 1), (1, 0), (-1, 0), (0, -1))
+    
+    def dfs(i: int, j: int, word_idx: int):
+        if board[i][j] != word[word_idx]:
+            return False
+        
+        if word_idx == len(word) - 1:
+            return True
+        
+        # print(f"looking at {(i, j)}: {board[i][j]}")
+        temp = board[i][j]
+        board[i][j] = '#'  # replace visited set
+        
+        for di, dj in dirs:
+            ni, nj = i + di, j + dj
+            if 0 <= ni < m and 0 <= nj < n and board[ni][nj] != '#':
+                if dfs(ni, nj, word_idx + 1):
+                    return True
+        # restore board's char to original
+        board[i][j] = temp
+            
+        return False
+    
+    for r in range(m):
+        for c in range(n):
+            if board[r][c] == word[0]:
+                if dfs(r, c, 0):
+                    return True
+            
+    return False
+
+b = [["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]]
+for _ in b:
+    print(_)
+print(wordSearch(b, 'ABCB'))
