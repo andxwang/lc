@@ -911,3 +911,35 @@ def canThreePartsEqualSum(arr: list[int]) -> bool:
             
     return False
     
+def merge(nums1: list[int], m: int, nums2: list[int], n: int) -> None:
+    """
+    Do not return anything, modify nums1 in-place instead.
+    """
+    i = m - 1
+    j = n - 1
+    a = m + n - 1
+    
+    while j >= 0 and i >= 0:
+        if nums2[j] > nums1[i]:
+            nums1[a] = nums2[j]
+            j -= 1
+        else:
+            nums1[a] = nums1[i]
+            i -= 1
+        a -= 1
+    
+    while a >= 0:
+        if i >= 0:
+            nums1[a] = nums1[i]
+            i -= 1
+        if j >= 0:
+            nums1[a] = nums2[j]
+            j -= 1
+        a -= 1
+
+l1 = [5, 6, 7, 8, 0, 0, 0]
+l2 = [1, 2, 3]
+# l2 = [5, 6, 7, 8]
+merge(l1, 4, l2, 3)
+print(l1)
+print(l2)
