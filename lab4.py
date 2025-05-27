@@ -596,22 +596,27 @@ def ladderLength(beginWord: str, endWord: str, wordList: List[str]) -> int:
     
 def setZeroes(matrix: List[List[int]]) -> None:
     m, n = len(matrix), len(matrix[0])
-    starting_coords = set()
+    # use top row and left col as "markers"
+    col0 = False
+    
     for i in range(m):
-        for j in range(n):
+        if matrix[i][0] == 0:
+            col0 = True
+        for j in range(1, n):
             if matrix[i][j] == 0:
-                starting_coords.add((i, j))
+                matrix[0][j] = 0
+                matrix[i][0] = 0
                 
-    for i, j in starting_coords:
-        # set row
-        for col in range(n):
-            matrix[i][col] = 0
-        # set col
-        for row in range(m):
-            matrix[row][j] = 0
+    # fill from bottom right to avoid overwriting first row/col info
+    for i in range(m - 1, -1, -1):
+        for j in range(n - 1, -1, -1):
+            if matrix[0][j] == 0 or matrix[i][0] == 0:
+                matrix[i][j] = 0
+        if col0:
+            matrix[i][0] = 0
        
 import random
-matrix = [[random.randint(1, 9) for _ in range(30)] for _ in range(50)]
+matrix = [[random.randint(0, 9) for _ in range(6)] for _ in range(8)]
 for _ in matrix:
     print(_)
 print()
