@@ -594,4 +594,28 @@ def ladderLength(beginWord: str, endWord: str, wordList: List[str]) -> int:
                     
     return 0
     
-print(ladderLength(beginWord='hit', endWord='cog', wordList=["dit","dot","dog","lot","cit","log","cog"]))
+def setZeroes(matrix: List[List[int]]) -> None:
+    m, n = len(matrix), len(matrix[0])
+    starting_coords = set()
+    for i in range(m):
+        for j in range(n):
+            if matrix[i][j] == 0:
+                starting_coords.add((i, j))
+                
+    for i, j in starting_coords:
+        # set row
+        for col in range(n):
+            matrix[i][col] = 0
+        # set col
+        for row in range(m):
+            matrix[row][j] = 0
+       
+import random
+matrix = [[random.randint(1, 9) for _ in range(30)] for _ in range(50)]
+for _ in matrix:
+    print(_)
+print()
+setZeroes(matrix)
+for _ in matrix:
+    print(_)
+
