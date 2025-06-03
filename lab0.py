@@ -470,5 +470,30 @@ def myPowIter(x: float, n: int) -> float:
 
     return ans if not neg else 1 / ans
 
-print(myPowIter(2.000, 6))
+def reformatNumber(number: str) -> str:
+    num = []
+    for c in number:
+        if c == ' ' or c == '-':
+            continue
+        num.append(c)
+    number = ''.join(num)
     
+    if len(number) == 2 or len(number) == 3:
+        return number
+    if len(number) == 4:
+        return number[:2] + '-' + number[2:]
+    
+    res = []
+    i = 0
+    while i + 4 < len(number):
+        res.append(number[i: i+3])
+        i += 3
+        
+    if len(number) - i <= 3:
+        res.append(number[i:])
+    if len(number) - i == 4:
+        res.extend([number[i: i+2], number[i+2:]])
+        
+    return '-'.join(res)
+    
+print(reformatNumber('12345678912'))    
