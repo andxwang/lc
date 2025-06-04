@@ -158,5 +158,29 @@ def countSubstrings(s: str) -> int:
                     
         # return ans[0]
 
-
-print(countSubstrings('abbcd'))
+def numDecodings(s: str) -> int:
+    code = {str(i): chr(64 + i) for i in range(1, 27)}
+    if s[0] == '0' or '00' in s:
+        return 0
+    
+    ct = [0]
+    def dfs(i, curr):
+        curr += s[i]
+        if curr not in code:
+            return
+        if i == len(s) - 1:
+            ct[0] += 1
+            return
+        
+        
+        if len(curr) == 2:
+            dfs(i + 1, '')  # 'xx', 'y' ...
+        elif len(curr) == 1:
+            dfs(i + 1, curr)
+            dfs(i + 1, '')
+        
+    dfs(0, '')
+    return ct[0]
+        
+    
+print(numDecodings('111111211'))
