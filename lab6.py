@@ -182,5 +182,28 @@ def numDecodings(s: str) -> int:
     dfs(0, '')
     return ct[0]
         
+def numDecodingsDP(s: str) -> int:    
+    code = {str(i) for i in range(1, 27)}
+    mem = {}
     
-print(numDecodings('111111211'))
+    def dp(i: int) -> int:
+        if i == len(s):
+            return 1
+        if i in mem:
+            return mem[i]
+        if s[i] == '0':
+            return 0
+        
+        # single digit- start new one
+        result = dp(i + 1)
+        
+        # if these two digits are valid, go to i + 2
+        if i + 1 < len(s) and s[i: i+2] in code:
+            result += dp(i + 2)
+            
+        mem[i] = result
+        return result
+    
+    return dp(0)
+
+print(numDecodingsDP('123'))
