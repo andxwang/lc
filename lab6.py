@@ -206,4 +206,41 @@ def numDecodingsDP(s: str) -> int:
     
     return dp(0)
 
-print(numDecodingsDP('123'))
+def coinChangeSlow(coins: list[int], amount: int) -> int:
+    memoi = [float('inf')] * (amount + 1)
+    def dfs(x):
+        if x == 0:
+            return 0
+        if x < 0:
+            return float('inf')
+        if memoi[x] != float('inf'):
+            return memoi[x]
+        
+        min_coins = float('inf')
+        for c in coins:
+            res = dfs(x - c)
+            min_coins = min(min_coins, 1 + res)
+        memoi[x] = min_coins
+        return min_coins
+            
+    ans = dfs(amount)
+    if ans != float('inf'):
+        return ans
+    else:
+        return -1
+            
+def coinChange(coins: list[int], amount: int) -> int:
+    """optimized bottom up DP"""
+    memoi = [float('inf')] * (amount + 1)
+    memoi[0] = 0
+
+    for n in range(1, amount + 1):
+        for c in coins:
+            if n - c >= 0:
+                memoi[n] = min(memoi[n], 1 + memoi[n - c])
+
+    if memoi[amount] != float('inf'):
+        return memoi[amount]
+    return -1
+
+print(coinChange([1, 2, 5], 13))
