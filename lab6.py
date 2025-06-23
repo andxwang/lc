@@ -253,4 +253,17 @@ def uniquePaths(m: int, n: int) -> int:
 
     return dp[-1]
 
-print(uniquePaths(13, 17))
+def maxProduct(nums: List[int]) -> int:
+    global_max = nums[0]
+    curr_max = nums[0]
+    curr_min = nums[0]
+    for n in nums[1:]:
+        prev_max, prev_min = curr_max, curr_min
+        curr_max = max(n * prev_max, n * prev_min, n)
+        curr_min = min(n * prev_min, n * prev_max, n)
+        global_max = max(curr_max, global_max)
+
+    return global_max
+        
+
+print(maxProduct([-2,3,-2,-3,-5,4]))
