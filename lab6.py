@@ -243,4 +243,19 @@ def coinChange(coins: list[int], amount: int) -> int:
         return memoi[amount]
     return -1
 
-print(coinChange([1, 2, 5], 13))
+def uniquePaths(m: int, n: int) -> int:
+    cache = [[-1] * n for _ in range(m)]
+    def dfs(i: int, j: int) -> int:
+        if i == m - 1 and j == n - 1:
+            return 1
+        if i >= m or j >= n:
+            return 0
+        if cache[i][j] != -1:
+            return cache[i][j]
+        res = dfs(i + 1, j) + dfs(i, j + 1)
+        cache[i][j] = res
+        return res
+    
+    return dfs(0, 0)
+
+print(uniquePaths(13, 16))
