@@ -53,15 +53,14 @@ def lastStoneWeight(stones: List[int]) -> int:
     return 0
 
 def kClosest(points: List[List[int]], k: int) -> List[List[int]]:
-    dists = [(p[0] * p[0] + p[1] * p[1], p) for p in points]
-    # can heapify dists but how to map back to original points?
-    heapq.heapify(dists)
-    
-    ans = []
-    for i in range(k):
-        dist, p = heapq.heappop(dists)
-        ans.append(p)
-                
-    return ans
+    max_heap = []
+    for p1, p2 in points:
+        dist = -(p1*p1 + p2*p2)  # negative to make "max heap"
+        heapq.heappush(max_heap, (dist, [p1, p2]))
+        if len(max_heap) > k:
+            # if more than k elements, remove smallest dist/point pair, aka "most negative" == largest dist
+            heapq.heappop(max_heap)
+            
+    return [p for (_, p) in max_heap]
 
 print(kClosest([[1,3],[-2,2],[6,8]], 2))
