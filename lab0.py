@@ -496,4 +496,15 @@ def reformatNumber(number: str) -> str:
         
     return '-'.join(res)
     
-print(reformatNumber('12345678912'))    
+def nearestValidPoint(x: int, y: int, points: List[List[int]]) -> int:
+    ans = -1
+    min_dist = float('inf')
+    for i, (a, b) in enumerate(points):
+        if a == x or b == y:
+            d = abs(a - x) + abs(b - y)
+            if ans == -1 or d < min_dist:
+                min_dist = d
+                ans = i
+    return ans if ans >= 0 else -1
+
+print(nearestValidPoint(3, 4, [[1,2],[3,1],[2,4],[2,3],[4,4]]))
