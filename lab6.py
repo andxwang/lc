@@ -265,5 +265,16 @@ def maxProduct(nums: List[int]) -> int:
 
     return global_max
         
+def wordBreak(s: str, wordDict: List[str]) -> bool:
+    dp = [False] * (len(s) + 1)
+    dp[-1] = True  # base case
+    
+    for i in range(len(s) - 1, -1, -1):
+        for word in wordDict:
+            if i + len(word) <= len(s) and s[i: i+len(word)] == word and dp[i + len(word)]:
+                dp[i] = True
+                break  # out of inner loop
+        
+    return dp[0]
 
-print(maxProduct([-2,3,-2,-3,-5,4]))
+print(wordBreak('applepen', ['a', 'pen', 'p', 'l', 'n', 'e']))
