@@ -277,4 +277,22 @@ def wordBreak(s: str, wordDict: List[str]) -> bool:
         
     return dp[0]
 
-print(wordBreak('applepen', ['a', 'pen', 'p', 'l', 'n', 'e']))
+def lengthOfLIS(nums: List[int]) -> int:
+    def dfs(i):
+        if i == len(nums) - 1:
+            return 1
+        # iterate through nums after i
+        # if n > nums[i]: this is a branch. Either add it or don't
+        dfs_results = []
+        for j in range(i + 1, len(nums)):
+            if nums[j] > nums[i]:
+                dfs_results.append(dfs(j))  # this is starting dfs for the next num (new i)
+        
+        print(f"idx {i}: temps = {dfs_results}")
+        return 1 + max(dfs_results, default=0)
+    
+    return max(dfs(c) for c in range(len(nums)))
+
+print(lengthOfLIS([-715, 36, 709, 993, -593, 586, -18, 466, 118, 775, 958, 357, 435, -430, -579, -962, -570, 204, 748, -276, 619, -952, -469, 198, 88, 156, -150, -383, -393, -267]))
+# print(lengthOfLIS([0, 1, 0, 3, 2, 3]))
+# print(lengthOfLIS([0, 1, 0, 3, 2, 3]))
