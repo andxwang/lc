@@ -278,17 +278,25 @@ def wordBreak(s: str, wordDict: List[str]) -> bool:
     return dp[0]
 
 def lengthOfLIS(nums: List[int]) -> int:
+    dp = [-1] * len(nums)
     def dfs(i):
         if i == len(nums) - 1:
             return 1
+        if dp[i] > -1:
+            return dp[i]
+        
         # iterate through nums after i
         # if n > nums[i]: this is a branch. Either add it or don't
         dfs_results = []
         for j in range(i + 1, len(nums)):
             if nums[j] > nums[i]:
+                if dp[j] > 0:
+                    dfs_results.append(dp[j])
+                    continue
                 dfs_results.append(dfs(j))  # this is starting dfs for the next num (new i)
         
         print(f"idx {i}: temps = {dfs_results}")
+        dp[i] = 1 + max(dfs_results, default=0)
         return 1 + max(dfs_results, default=0)
     
     return max(dfs(c) for c in range(len(nums)))
