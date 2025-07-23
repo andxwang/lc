@@ -277,7 +277,7 @@ def wordBreak(s: str, wordDict: List[str]) -> bool:
         
     return dp[0]
 
-def lengthOfLIS(nums: List[int]) -> int:
+def lengthOfLIS_dfs(nums: List[int]) -> int:
     dp = [-1] * len(nums)
     def dfs(i):
         if i == len(nums) - 1:
@@ -301,6 +301,17 @@ def lengthOfLIS(nums: List[int]) -> int:
     
     return max(dfs(c) for c in range(len(nums)))
 
-print(lengthOfLIS([-715, 36, 709, 993, -593, 586, -18, 466, 118, 775, 958, 357, 435, -430, -579, -962, -570, 204, 748, -276, 619, -952, -469, 198, 88, 156, -150, -383, -393, -267]))
-# print(lengthOfLIS([0, 1, 0, 3, 2, 3]))
-# print(lengthOfLIS([0, 1, 0, 3, 2, 3]))
+def lengthOfLIS(nums: List[int]) -> int:
+    """iterative"""
+    dp = [1] * len(nums)
+    for i in range(len(nums)):
+        for j in range(i):
+            if nums[j] < nums[i]:
+                dp[i] = max(dp[i], dp[j] + 1)
+                
+    return max(dp)
+
+# print(lengthOfLIS([-715, 36, 709, 993, -593, 586, -18, 466, 118, 775, 958, 357, 435, -430, -579, -962, -570, 204, 748, -276, 619, -952, -469, 198, 88, 156, -150, -383, -393, -267]))
+import random
+rand_list = [random.randint(-1000, 1000) for _ in range(2499)]
+print(rand_list)
