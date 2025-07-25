@@ -311,7 +311,20 @@ def lengthOfLIS(nums: List[int]) -> int:
                 
     return max(dp)
 
-# print(lengthOfLIS([-715, 36, 709, 993, -593, 586, -18, 466, 118, 775, 958, 357, 435, -430, -579, -962, -570, 204, 748, -276, 619, -952, -469, 198, 88, 156, -150, -383, -393, -267]))
+import bisect
+def lengthOfLIS_efficient(nums: List[int]) -> int:
+    tails = [nums[0]]
+    for n in nums[1:]:
+        if n > tails[-1]:
+            tails.append(n)
+        else:
+            replace_idx = bisect.bisect_left(tails, n)
+            tails[replace_idx] = n
+    return len(tails)
+
+
 import random
 rand_list = [random.randint(-1000, 1000) for _ in range(2499)]
-print(rand_list)
+# print(rand_list)
+print(lengthOfLIS_efficient([12, 9, 6, 2, 4, 2, 8]))
+
