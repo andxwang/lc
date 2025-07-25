@@ -507,4 +507,20 @@ def nearestValidPoint(x: int, y: int, points: List[List[int]]) -> int:
                 ans = i
     return ans if ans >= 0 else -1
 
-print(nearestValidPoint(3, 4, [[1,2],[3,1],[2,4],[2,3],[4,4]]))
+def convert(s: str, numRows: int) -> str:
+    if numRows == 1:
+        return s
+    rows = [''] * numRows  # list of ''.joined strs for each row
+    idx = 0
+    step = 1
+    for c in s:
+        rows[idx] += c
+        if idx == 0:
+            step = 1
+        elif idx == numRows - 1:
+            step = -1
+        idx += step
+        
+    return ''.join(rows)
+    
+print(convert('a,b,c,d,e,f,g', 1))
