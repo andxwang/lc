@@ -322,9 +322,20 @@ def lengthOfLIS_efficient(nums: List[int]) -> int:
             tails[replace_idx] = n
     return len(tails)
 
+def canPartition(nums: list[int]) -> bool:
+    if sum(nums) % 2 == 1:
+        return False
+    
+    target = sum(nums) // 2
+    dp = {0}
+    for i in range(len(nums) - 1, -1, -1):
+        temp = set()
+        for x in dp:
+            if x + nums[i] == target:
+                return True
+            temp.add(x + nums[i])
+        dp = dp.union(temp)
+            
+    return target in dp
 
-import random
-rand_list = [random.randint(-1000, 1000) for _ in range(2499)]
-# print(rand_list)
-print(lengthOfLIS_efficient([12, 9, 6, 2, 4, 2, 8]))
-
+print(canPartition([4, 6, 7, 2, 3]))
