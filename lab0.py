@@ -523,4 +523,30 @@ def convert(s: str, numRows: int) -> str:
         
     return ''.join(rows)
     
-print(convert('a,b,c,d,e,f,g', 1))
+def myAtoi(s: str) -> int:
+    s = s.lstrip()
+    if len(s) == 0:
+        return 0
+    sign = 1
+    if s[0] == '-':
+        sign = -1
+        s = s[1:]
+    elif s[0] == '+':
+        s = s[1:]
+    
+    ans = 0
+    for c in s:
+        # if c == '0' and ans != 0:
+        #     continue
+        if not c.isnumeric():
+            if sign < 0:
+                return max(ans * sign, -2**31)
+            return min(ans, 2**31 - 1) * sign
+        ans *= 10
+        ans += ord(c) - ord('0')
+
+    if sign < 0:
+        return max(ans * sign, -2**31)
+    return min(ans, 2**31 - 1) * sign
+
+print(myAtoi('000020004'))
