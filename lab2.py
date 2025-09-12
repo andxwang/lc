@@ -376,14 +376,21 @@ def evaluateTree(root: TreeNode) -> bool:
     if root.val == 3:
         return evaluateTree(root.left) and evaluateTree(root.right)
     
-r = TreeNode(2)
-r.left = TreeNode(1)
-r.right = TreeNode(3)
-r.right.left = TreeNode(0)
-r.right.right = TreeNode(1)
+def lca(root: TreeNode, p: int, q: int) -> TreeNode:
+    if p < root.val and q < root.val:
+        return lca(root.left, p, q)
+    if p > root.val and q > root.val:
+        return lca(root.right, p, q)
+    return root
+    
+r = TreeNode(20)
+r.left = TreeNode(11)
+r.right = TreeNode(32)
+r.right.left = TreeNode(22)
+r.right.right = TreeNode(45)
 
 print(r)
-print(evaluateTree(r))
+print(lca(r, 22, 45).val)
         
 
 r0 = TreeNode(1)
