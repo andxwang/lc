@@ -382,15 +382,42 @@ def lca(root: TreeNode, p: int, q: int) -> TreeNode:
     if p > root.val and q > root.val:
         return lca(root.right, p, q)
     return root
+
+def insertIntoBst(root: TreeNode, val: int):
+    """assume unique keys; returns the new root"""
+    if root is None:
+        return TreeNode(val)
+    curr = root
+    while True:
+        if val < curr.val:
+            if not curr.left:
+                curr.left = TreeNode(val)
+                break
+            curr = curr.left
+        elif val > curr.val:
+            if not curr.right:
+                curr.right = TreeNode(val)
+                break
+            curr = curr.right
+        else:
+            break  # value already exists, do nothing
+    return root
+
+def buildBst(l: list[int]) -> TreeNode:
+    """assume unique keys; handles empty list and returns the new root"""
+    root = None
+    for val in l:
+        root = insertIntoBst(root, val)
+    return root
+
+print(buildBst([30, 20, 40, -100, -80, 25, 0]))
+print(buildBst([10, -5, 5]))
     
 r = TreeNode(20)
 r.left = TreeNode(11)
 r.right = TreeNode(32)
 r.right.left = TreeNode(22)
 r.right.right = TreeNode(45)
-
-print(r)
-print(lca(r, 22, 45).val)
         
 
 r0 = TreeNode(1)
