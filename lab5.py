@@ -72,4 +72,38 @@ def findKthLargest(nums: List[int], k: int) -> int:
             
     return min_heap[0]  # smallest of largest k elements = kth largest
 
-print(findKthLargest([1, 2, 3, 4, 5], 2))
+from collections import Counter, defaultdict
+def leastInterval(tasks: List[str], n: int) -> int:
+    tasks = list(map(list, Counter(tasks).most_common()))
+    last = {}  # store 'X': last time X occurred
+    time = 0
+    result = []  # only for debugging
+    while len(tasks) > 0:
+        time += 1
+        tasks.sort(key=lambda t: t[1], reverse=True)
+        # iterate through tasks and find the first available
+        for i, (x, c) in enumerate(tasks):
+            if x not in last or time - n > last[x]:
+                break
+        else:
+            # idle
+            # time += 1
+            result.append("idle")
+            continue
+        x, c = tasks[i]
+        last[x] = time
+        result.append(x)
+
+
+        tasks[i][1] -= 1
+        if tasks[i][1] == 0:
+            tasks.pop(i)
+        # time += 1
+
+    print("results:", '->'.join(result))
+    return time
+
+
+# print(leastInterval(["A","C","A","B","D","A","B"], 4))
+print(leastInterval(["A","A","A","B","B","B"], 2))
+# print(leastInterval(["A","C","A","B","D","B"], 1))
