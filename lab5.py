@@ -105,5 +105,20 @@ def leastInterval(tasks: List[str], n: int) -> int:
 
 
 # print(leastInterval(["A","C","A","B","D","A","B"], 4))
-print(leastInterval(["A","A","A","B","B","B"], 2))
+# print(leastInterval(["A","A","A","B","B","B"], 2))
 # print(leastInterval(["A","C","A","B","D","B"], 1))
+
+from collections import deque
+def leastInterval2(tasks: List[str], n: int) -> int:
+    tasks = list((-v, k) for k, v in Counter(tasks).items())
+    heapq.heapify(tasks)
+
+    last = deque()
+    time = 0
+    while len(tasks) > 0:
+        time += 1
+        tasks.sort(key=lambda t: t[1], reverse=True)
+
+    return time
+
+print(leastInterval2(["A","C","A","B","D","A","B"], 4))
