@@ -113,12 +113,34 @@ def leastInterval2(tasks: List[str], n: int) -> int:
     tasks = list((-v, k) for k, v in Counter(tasks).items())
     heapq.heapify(tasks)
 
-    last = deque()
+    cooldown_queue = deque()  # (freq, task, next avail time)
     time = 0
-    while len(tasks) > 0:
+    while tasks or cooldown_queue:
         time += 1
-        tasks.sort(key=lambda t: t[1], reverse=True)
+        while cooldown_queue:
+            freq, task, next_avail_time = cooldown_queue[0]
+            if time >= next_avail_time:
+                # task is ready; add it back to heap and popleft from queue
+                heapq.heappush(tasks, (freq, task))
+                _ = cooldown_queue.popleft()
+            else:
+                break
+        # pop the most frequent task
+        if len(tasks) > 0:
+            freq, task = heapq.heappop(tasks)
+            print(f"time {time}: task {task}")
+            if freq + 1 < 0:
+                cooldown_queue.append((freq + 1, task, time + n + 1))  # freq + 1 bc it's negative
+        else:
+            if cooldown_queue:
+                # idle
+                _, _, next_avail_time = cooldown_queue[0]
+                time = next_avail_time - 1
+                print(f"idling until time {time}")
+        
 
     return time
 
-print(leastInterval2(["A","C","A","B","D","A","B"], 4))
+# print(leastInterval2(["A","C","A","B","D","A","B"], 10))
+# print(leastInterval2(["A","A","A","B","B","B"], 2))
+print(leastInterval2(list('SADHFUIHEWIUNNBFDJKHGKLJDSFHFKLJRESHFILUAWEGFBFKDLJBBJNFDJBNSDKFJNBEUIYSORNIUYORHBGIOWAHBGIWAUEHFEIAWUHEFKLJSADHF'), 26))
