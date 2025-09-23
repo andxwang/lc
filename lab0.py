@@ -549,4 +549,32 @@ def myAtoi(s: str) -> int:
         return max(ans * sign, -2**31)
     return min(ans, 2**31 - 1) * sign
 
-print(myAtoi('000020004'))
+def compareVersion(version1: str, version2: str) -> int:
+    v1 = [int(a) for a in version1.split('.')]
+    v2 = [int(a) for a in version2.split('.')]
+    
+    for i, (a, b) in enumerate(zip(v1, v2)):
+        if a > b:
+            return 1
+        if a < b:
+            return -1
+
+    # reached end
+    if len(v1) == len(v2):
+        return 0
+    
+    if i == len(v1) - 1:
+        # v2 is longer
+        if sum(v2[i + 1:]) == 0:
+            return 0
+        else:
+            return -1
+    else:
+        # v1 is longer
+        if sum(v1[i + 1:]) == 0:
+            return 0
+        else:
+            return 1
+    
+        
+print(compareVersion('1.0', '1'))
