@@ -576,5 +576,16 @@ def compareVersion(version1: str, version2: str) -> int:
         else:
             return 1
     
-        
-print(compareVersion('1.0', '1'))
+def numWaterBottles(numBottles: int, numExchange: int) -> int:
+    ans = 0
+    empty = 0
+    while numBottles > 0:
+        ans += numBottles
+        empty += numBottles
+        numBottles = 0
+        # exchange numExchange empty bottles per one full bottle
+        numBottles += empty // numExchange
+        empty = empty % numExchange
+    return ans
+
+print(numWaterBottles(15, 4))
