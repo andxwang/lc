@@ -144,3 +144,33 @@ def leastInterval2(tasks: List[str], n: int) -> int:
 # print(leastInterval2(["A","C","A","B","D","A","B"], 10))
 # print(leastInterval2(["A","A","A","B","B","B"], 2))
 print(leastInterval2(list('SADHFUIHEWIUNNBFDJKHGKLJDSFHFKLJRESHFILUAWEGFBFKDLJBBJNFDJBNSDKFJNBEUIYSORNIUYORHBGIOWAHBGIWAUEHFEIAWUHEFKLJSADHF'), 26))
+
+class Twitter:
+
+    def __init__(self):
+        self.time = 0
+        self.followMap = defaultdict(set)  # x: y means x follows y
+        self.tweetMap = defaultdict(list)  # user: list of tweets
+
+    def postTweet(self, userId: int, tweetId: int) -> None:
+        self.tweetMap[userId].append((self.time, tweetId))
+        # print(f"adding tweet {tweetId} to user {userId}")
+        self.time +=1
+
+    def getNewsFeed(self, userId: int) -> List[int]:
+        # print(f"getting news feed for user {userId}: {self.tweetMap}")
+        own_tweets = self.tweetMap[userId][:]
+        following_tweets = [t for other in self.followMap[userId] for t in self.tweetMap[other]]
+        # print(f"\town: {own_tweets} following: {following_tweets}")
+        own_tweets.extend(following_tweets)
+        own_tweets = sorted(own_tweets, key=lambda t: t[0], reverse=True)
+        return [t[1] for t in own_tweets[:10]]
+
+    def follow(self, followerId: int, followeeId: int) -> None:
+        self.followMap[followerId].add(followeeId)
+        # print(f"{followerId} followed {followeeId}: map is now {self.followMap}")
+
+    def unfollow(self, followerId: int, followeeId: int) -> None:
+        if followerId in self.followMap:
+            self.followMap[followerId].remove(followeeId)
+            # print(f"{followerId} unfollowed {followeeId}: map is now {self.followMap}")
