@@ -410,8 +410,32 @@ def buildBst(l: list[int]) -> TreeNode:
         root = insertIntoBst(root, val)
     return root
 
-print(buildBst([30, 20, 40, -100, -80, 25, 0]))
-print(buildBst([10, -5, 5]))
+
+class BSTIterator:
+
+    def _add_to_list(self, root):
+        if root:
+            self._add_to_list(root.left)
+            self.arr.append(root.val)
+            self._add_to_list(root.right)
+
+
+    def __init__(self, root: TreeNode | None):
+        self.arr = []
+        self._add_to_list(root)
+        self.idx = -1
+        # print("arr is", self.arr)
+            
+
+    def next(self) -> int:
+        if self.idx < len(self.arr) - 1:
+            self.idx += 1
+            # print("next returns", self.arr[self.idx])
+            return self.arr[self.idx]
+
+    def hasNext(self) -> bool:
+        return self.idx < len(self.arr) - 1
+
     
 r = TreeNode(20)
 r.left = TreeNode(11)
@@ -441,7 +465,7 @@ r1.right.left = TreeNode(17)
 r1.right.right = TreeNode(25)
 r1.left.left.left = TreeNode(6)
 r1.left.left.right = TreeNode(9)
-# print(r1)
+print(r1)
 
 r2 = TreeNode(1)
 r2.left = TreeNode(2)
