@@ -416,8 +416,8 @@ def merge(nums1: list[int], m: int, nums2: list[int], n: int) -> None:
             j -= 1
         a -= 1
 
-l1 = [5, 6, 7, 8, 0, 0, 0]
-l2 = [1, 2, 3]
+# l1 = [5, 6, 7, 8, 0, 0, 0]
+# l2 = [1, 2, 3]
 # l2 = [5, 6, 7, 8]
 
 def leftRightDifference(nums: List[int]) -> List[int]:
@@ -588,4 +588,28 @@ def numWaterBottles(numBottles: int, numExchange: int) -> int:
         empty = empty % numExchange
     return ans
 
-print(numWaterBottles(15, 4))
+
+from collections import deque
+class MyStack:
+
+    def __init__(self):
+        self.qs = [deque(), deque()]
+        self.last_q_idx = 0  # 0 or 1
+
+    def push(self, x: int) -> None:
+        self.qs[self.last_q_idx].append(x)
+
+    def pop(self) -> int:
+        while len(self.qs[self.last_q_idx]) > 1:
+            self.qs[(self.last_q_idx + 1) % 2].append(self.qs[self.last_q_idx].popleft())
+        t = self.qs[self.last_q_idx].popleft()
+        self.last_q_idx = (self.last_q_idx + 1) % 2
+        return t
+
+    def top(self) -> int:
+        while len(self.qs[self.last_q_idx]) > 1:
+            self.qs[(self.last_q_idx + 1) % 2].append(self.qs[self.last_q_idx].popleft())
+        return self.qs[self.last_q_idx][0]
+
+    def empty(self) -> bool:
+        return len(self.qs[0]) == len(self.qs[1]) == 0
