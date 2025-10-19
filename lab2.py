@@ -165,6 +165,24 @@ def binaryTreePaths(root: TreeNode | None) -> list[str]:
     _aux(root, [])
     return paths
 
+def binaryTreePathsNoPop(root: TreeNode | None) -> list[str]:
+    """this version doesn't pop- just uses not inplace + []"""
+    paths = []
+    def _aux(node: TreeNode | None, path: list):
+        if not node:
+            return
+        if node.left is None and node.right is None:
+            # node is leaf node
+            paths.append('->'.join(path + [str(node.val)]))
+            # path.pop()
+            return
+        _aux(node.left, path + [str(node.val)])
+        _aux(node.right, path + [str(node.val)])
+        # path.pop()
+
+    _aux(root, [])
+    return paths
+
 def isSubtree(root: TreeNode | None, subRoot: TreeNode | None) -> bool:
 
     if not root:
@@ -514,5 +532,5 @@ r3 = TreeNode(1)
 r3.left = TreeNode(2)
 # print(r3)
 
-print(binaryTreePaths(r0))
+print(binaryTreePathsNoPop(r0))
 
