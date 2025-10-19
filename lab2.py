@@ -429,6 +429,29 @@ class BSTIterator:
     def hasNext(self) -> bool:
         return len(self.stack) > 0 or self.curr is not None
 
+from lab1 import ListNode
+def sortedListToBST(head: ListNode | None) -> TreeNode | None:
+    if head is None:
+        return None
+    slow = head
+    fast = head
+    slow_prev = None
+    while fast and fast.next:
+        slow_prev = slow
+        fast = fast.next.next
+        slow = slow.next
+
+    if slow_prev is None:
+        # first node
+        return TreeNode(head.val)
+    slow_prev.next = None
+    root = TreeNode(slow.val)
+    root.left = sortedListToBST(head)
+    root.right = sortedListToBST(slow.next)
+    return root
+
+print(sortedListToBST(ListNode.create_linked_list([-10,-3,2,5,9,11,13,15,17,19])))
+
     
 r = TreeNode(20)
 r.left = TreeNode(11)
@@ -446,7 +469,7 @@ r0.left.left.left = TreeNode(6)
 r0.left.right.right = TreeNode(8)
 r0.left.right.right.left = TreeNode(9)
 r0.left.right.right.left.left = TreeNode(10)
-print(r0)
+# print(r0)
 
 r1 = TreeNode(15)
 r1.left = TreeNode(10)
@@ -459,7 +482,7 @@ r1.right.right = TreeNode(25)
 r1.left.left.left = TreeNode(6)
 r1.left.left.left.left = TreeNode(2)
 r1.left.left.right = TreeNode(9)
-print(r1)
+# print(r1)
 
 r2 = TreeNode(1)
 r2.left = TreeNode(2)
