@@ -146,6 +146,24 @@ def levelOrderQueue(root: TreeNode | None) -> list[list[int]]:
 
     return res
 
+def binaryTreePaths(root: TreeNode | None) -> list[str]:
+    paths = []
+    def _aux(node: TreeNode | None, path: list):
+        if not node:
+            return
+        path.append(str(node.val))
+        if node.left is None and node.right is None:
+            # node is leaf node
+            s = '->'.join(path)
+            paths.append(s)
+            path.pop()
+            return
+        _aux(node.left, path)
+        _aux(node.right, path)
+        path.pop()
+
+    _aux(root, [])
+    return paths
 
 def isSubtree(root: TreeNode | None, subRoot: TreeNode | None) -> bool:
 
@@ -450,8 +468,6 @@ def sortedListToBST(head: ListNode | None) -> TreeNode | None:
     root.right = sortedListToBST(slow.next)
     return root
 
-print(sortedListToBST(ListNode.create_linked_list([-10,-3,2,5,9,11,13,15,17,19])))
-
     
 r = TreeNode(20)
 r.left = TreeNode(11)
@@ -465,11 +481,12 @@ r0.left = TreeNode(2)
 r0.right = TreeNode(3)
 r0.left.left = TreeNode(4)
 r0.left.right = TreeNode(5)
+r0.left.right.left = TreeNode(7)
 r0.left.left.left = TreeNode(6)
 r0.left.right.right = TreeNode(8)
 r0.left.right.right.left = TreeNode(9)
 r0.left.right.right.left.left = TreeNode(10)
-# print(r0)
+print(r0)
 
 r1 = TreeNode(15)
 r1.left = TreeNode(10)
@@ -496,4 +513,6 @@ r2.right.right = TreeNode(7)
 r3 = TreeNode(1)
 r3.left = TreeNode(2)
 # print(r3)
+
+print(binaryTreePaths(r0))
 
