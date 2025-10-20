@@ -486,6 +486,19 @@ def sortedListToBST(head: ListNode | None) -> TreeNode | None:
     root.right = sortedListToBST(slow.next)
     return root
 
+def numUniqueBSTs(n: int) -> int:
+    dp = defaultdict(int)
+    # base cases
+    dp[0] = 1
+    dp[1] = 1
+    for j in range(2, n + 1):
+        for i in range(0, j):
+            dp[j] += dp[i] * dp[j - i - 1]
+
+    return dp[n]
+
+print(numUniqueBSTs(6))
+
     
 r = TreeNode(20)
 r.left = TreeNode(11)
@@ -504,7 +517,7 @@ r0.left.left.left = TreeNode(6)
 r0.left.right.right = TreeNode(8)
 r0.left.right.right.left = TreeNode(9)
 r0.left.right.right.left.left = TreeNode(10)
-print(r0)
+# print(r0)
 
 r1 = TreeNode(15)
 r1.left = TreeNode(10)
@@ -532,5 +545,5 @@ r3 = TreeNode(1)
 r3.left = TreeNode(2)
 # print(r3)
 
-print(binaryTreePathsNoPop(r0))
+# print(binaryTreePathsNoPop(r0))
 
