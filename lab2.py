@@ -497,8 +497,54 @@ def numUniqueBSTs(n: int) -> int:
 
     return dp[n]
 
-print(numUniqueBSTs(6))
+def generateUniqueBSTs(n: int) -> list[TreeNode | None]:
+    ans = []
+    def _aux(nodes: list[int], level=1):
+        if len(nodes) == 0:
+            return None
+        if len(nodes) == 1:
+            return TreeNode(nodes[0])
 
+        for j, root_val in enumerate(nodes):
+            # pick the root val
+            # careful with 0 vs 1 starting idx
+            # [1] 2 3 4 
+            # 1 [2] 3 4
+            # 1 2 [3] 4
+            # 1 2 3 [4]
+            # should have i * (i * j - 1) its of this
+            # for left in range(j)
+            # for right in range(j+1, end)
+            # cartesian cross ^
+            print('=' * 40, "j =", j, '=' * 40)
+            for right in range(j + 1, len(nodes)):
+                for left in range(0, j + 1):
+                    print(nodes[left], nodes[right])
+                    print('\t', nodes[:left], nodes[j], nodes[right:])
+        #             root = TreeNode(root_val)
+        #             root.left = _aux(nodes[:left], level + 1)
+        #             root.right = _aux(nodes[right:], level + 1)
+        #             if level == 1:
+        #                 ans.append(root)
+        # return root
+
+
+    fc = list(i for i in range(1, n + 1))
+    _aux(fc)
+    # for root_val in range(1, n + 1):
+    #     r = _aux(fc)
+    #     ans.append(r)
+    return ans
+
+for tr in generateUniqueBSTs(4):
+    print(tr, end=f"\n{'=' * 20}\n")
+
+l = [1, 2, 3, 4]
+for n in l:
+    # [] 1 [2 3 4]
+    # 1 [2] [3 4]
+    # [1 2] 3 [4]
+    pass
     
 r = TreeNode(20)
 r.left = TreeNode(11)
