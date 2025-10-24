@@ -498,53 +498,64 @@ def numUniqueBSTs(n: int) -> int:
     return dp[n]
 
 def generateUniqueBSTs(n: int) -> list[TreeNode | None]:
-    ans = []
-    def _aux(nodes: list[int], level=1):
+    cache = {}
+    def dfs_all_subtrees(nodes: list[int]):
         if len(nodes) == 0:
-            return None
+            return [None]
         if len(nodes) == 1:
-            return TreeNode(nodes[0])
+            return [TreeNode(nodes[0])]
+        if tuple(nodes) in cache:
+            return cache[tuple(nodes)]
 
+        trees = []
         for j, root_val in enumerate(nodes):
-            # pick the root val
-            # careful with 0 vs 1 starting idx
-            # [1] 2 3 4 
-            # 1 [2] 3 4
-            # 1 2 [3] 4
-            # 1 2 3 [4]
-            # should have i * (i * j - 1) its of this
-            # for left in range(j)
-            # for right in range(j+1, end)
-            # cartesian cross ^
-            print('=' * 40, "j =", j, '=' * 40)
-            for right in range(j + 1, len(nodes)):
-                for left in range(0, j + 1):
-                    print(nodes[left], nodes[right])
-                    print('\t', nodes[:left], nodes[j], nodes[right:])
-        #             root = TreeNode(root_val)
-        #             root.left = _aux(nodes[:left], level + 1)
-        #             root.right = _aux(nodes[right:], level + 1)
-        #             if level == 1:
-        #                 ans.append(root)
-        # return root
+            # print(f"{'=' * 20} nodes[j] = nodes[{j}] = {root_val} {'=' * 20}")
+            # pick out the current root
+            left_arr = nodes[:j]
+            right_arr = nodes[j +1:]
+            # print("left:", left_arr)
+            # print("right:", right_arr)
+            for possible_left_subtree in dfs_all_subtrees(left_arr):
+                for possible_right_subtree in dfs_all_subtrees(right_arr):
+                    curr_root = TreeNode(root_val)
+                    curr_root.left = possible_left_subtree
+                    curr_root.right = possible_right_subtree
+                    trees.append(curr_root)
+        cache[tuple(nodes)] = trees
+        return trees
 
+    nums = list(i for i in range(1, n + 1))
+    return dfs_all_subtrees(nums)
 
-    fc = list(i for i in range(1, n + 1))
-    _aux(fc)
-    # for root_val in range(1, n + 1):
-    #     r = _aux(fc)
-    #     ans.append(r)
-    return ans
+def generateUniqueBSTs_ints(n: int) -> list[TreeNode | None]:
+    """
+    Generates all unique BSTs using integer indices instead of passing lists.
+    Returns a list of TreeNode roots.
+    """
+    cache = {}
+    def dfs(start: int, end: int):
+        if start > end:
+            return [None]
+        if (start, end) in cache:
+            return cache[(start, end)]
+        trees = []
+        for root_val in range(start, end + 1):
+            left_subtrees = dfs(start, root_val - 1)
+            right_subtrees = dfs(root_val + 1, end)
+            for left in left_subtrees:
+                for right in right_subtrees:
+                    root = TreeNode(root_val)
+                    root.left = left
+                    root.right = right
+                    trees.append(root)
+        cache[(start, end)] = trees
+        return trees
+    return dfs(1, n)
 
-for tr in generateUniqueBSTs(4):
+for tr in (uniqBsts := generateUniqueBSTs(n := 5)):
     print(tr, end=f"\n{'=' * 20}\n")
-
-l = [1, 2, 3, 4]
-for n in l:
-    # [] 1 [2 3 4]
-    # 1 [2] [3 4]
-    # [1 2] 3 [4]
-    pass
+print(len(uniqBsts))
+assert len(uniqBsts) == numUniqueBSTs(n)
     
 r = TreeNode(20)
 r.left = TreeNode(11)
