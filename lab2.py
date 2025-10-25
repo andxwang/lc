@@ -552,16 +552,35 @@ def generateUniqueBSTs_ints(n: int) -> list[TreeNode | None]:
         return trees
     return dfs(1, n)
 
-for tr in (uniqBsts := generateUniqueBSTs(n := 5)):
-    print(tr, end=f"\n{'=' * 20}\n")
-print(len(uniqBsts))
-assert len(uniqBsts) == numUniqueBSTs(n)
+def pathSum(root: TreeNode | None, targetSum: int) -> list[list[int]]:
+    if not root:
+        return []
+    def aux(node: TreeNode, currSum: int, path: list, all_paths=[]):
+        if node.left is None and node.right is None:
+            # leaf node
+            if currSum + node.val == targetSum:
+                ret_path = path[:]
+                ret_path.append(node.val)
+                all_paths.append(ret_path)
+                return ret_path
+            return []
+        
+        path.append(node.val)
+        aux(node.left, currSum + node.val, path, all_paths) if node.left else []
+        aux(node.right, currSum + node.val, path, all_paths) if node.right else []
+        path.pop()
+    
+    ans = []
+    aux(root, 0, [], ans)
+    return ans
+
     
 r = TreeNode(20)
 r.left = TreeNode(11)
 r.right = TreeNode(32)
 r.right.left = TreeNode(22)
 r.right.right = TreeNode(45)
+# print(r)
         
 
 r0 = TreeNode(1)
@@ -601,6 +620,3 @@ r2.right.right = TreeNode(7)
 r3 = TreeNode(1)
 r3.left = TreeNode(2)
 # print(r3)
-
-# print(binaryTreePathsNoPop(r0))
-
