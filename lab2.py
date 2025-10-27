@@ -574,6 +574,27 @@ def pathSum(root: TreeNode | None, targetSum: int) -> list[list[int]]:
     aux(root, 0, [], ans)
     return ans
 
+def isSymmetric(root: TreeNode | None) -> bool:
+    if root is None:
+        return True
+    q = deque()  # contains TreeNodes
+    q.append(root.left)
+    q.append(root.right)
+    while q:
+        layer_len = len(q)
+        temp = []  # contains ints
+        for _ in range(layer_len):
+            node = q.popleft()
+            if node is None:
+                temp.append('x')
+            else:
+                temp.append(node.val)
+                q.append(node.left)
+                q.append(node.right)
+        if temp[:layer_len // 2] != temp[layer_len // 2:][::-1]:
+            return False
+    return True
+
     
 r = TreeNode(20)
 r.left = TreeNode(11)
@@ -620,3 +641,28 @@ r2.right.right = TreeNode(7)
 r3 = TreeNode(1)
 r3.left = TreeNode(2)
 # print(r3)
+
+r4 = TreeNode(1)
+# level 2
+r4.left = TreeNode(2)
+r4.right = TreeNode(2)
+# level 3
+r4.left.left = TreeNode(3)
+r4.left.right = TreeNode(4)
+r4.right.left = TreeNode(4)
+r4.right.right = TreeNode(3)
+# level 4
+r4.left.left.left = TreeNode(5)
+r4.left.left.right = TreeNode(6)
+r4.left.right.left = TreeNode(7)
+r4.left.right.right = TreeNode(8)
+r4.right.left.left = TreeNode(8)
+r4.right.left.right = TreeNode(7)
+r4.right.right.left = TreeNode(6)
+r4.right.right.right = TreeNode(5)
+# level 5 (one deeper symmetric pair)
+r4.left.left.left.left = TreeNode(9)
+r4.right.right.right.right = TreeNode(9)
+print(r4)
+
+print(isSymmetric(r4))
