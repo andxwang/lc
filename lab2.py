@@ -595,6 +595,25 @@ def isSymmetric(root: TreeNode | None) -> bool:
             return False
     return True
 
+def findTilt(root: TreeNode | None) -> int:
+    tilts = []  # or use constant var with list to modify in-place like tilt_sum = [0]
+    def _sumupto(node: TreeNode | None) -> int:
+        if node is None:
+            return 0
+        
+        if node.left is None and node.right is None:
+            return node.val
+        
+        sum_left = _sumupto(node.left)
+        sum_right = _sumupto(node.right)
+        tilts.append(abs(sum_left - sum_right))
+
+        return sum_left + sum_right + node.val
+    
+    _sumupto(root)
+    return tilts, sum(tilts)
+
+
     
 r = TreeNode(20)
 r.left = TreeNode(11)
@@ -614,7 +633,9 @@ r0.left.left.left = TreeNode(6)
 r0.left.right.right = TreeNode(8)
 r0.left.right.right.left = TreeNode(9)
 r0.left.right.right.left.left = TreeNode(10)
-# print(r0)
+print(r0)
+
+print(findTilt(r0))
 
 r1 = TreeNode(15)
 r1.left = TreeNode(10)
@@ -663,6 +684,4 @@ r4.right.right.right = TreeNode(5)
 # level 5 (one deeper symmetric pair)
 r4.left.left.left.left = TreeNode(9)
 r4.right.right.right.right = TreeNode(9)
-print(r4)
-
-print(isSymmetric(r4))
+# print(r4)
