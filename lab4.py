@@ -1,4 +1,5 @@
 from collections import defaultdict, deque
+from termcolor import colored
 
 def numIslands(grid: list[list[str]]) -> int:
     # count connected components
@@ -388,6 +389,12 @@ def surroundedRegions(board: List[List[str]]) -> None:
 
     return
 
+def print_board(board):
+    for row in board:
+        # print X in red, leave O default
+        print(' '.join(colored(ch, 'red') if ch == 'X' else ch for ch in row))
+
+
 from collections import deque
 def canFinish(numCourses: int, prerequisites: List[List[int]]) -> bool:
     """topological sort graph problem"""
@@ -614,13 +621,3 @@ def setZeroes(matrix: List[List[int]]) -> None:
                 matrix[i][j] = 0
         if col0:
             matrix[i][0] = 0
-       
-import random
-matrix = [[random.randint(0, 9) for _ in range(6)] for _ in range(8)]
-for _ in matrix:
-    print(_)
-print()
-setZeroes(matrix)
-for _ in matrix:
-    print(_)
-
