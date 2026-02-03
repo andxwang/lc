@@ -613,7 +613,23 @@ def findTilt(root: TreeNode | None) -> int:
     _sumupto(root)
     return tilts, sum(tilts)
 
+def flatten(root: TreeNode | None):
+    # modify in place
+    
+    pass
 
+def preorderT(root: TreeNode | None):
+    if not root:
+        return []
+    ans = []
+    def preOrderAux(node: TreeNode):
+        ans.append(node.val)
+        if node.left:
+            preOrderAux(node.left)
+        if node.right:
+            preOrderAux(node.right)
+    preOrderAux(root)
+    return ans
     
 r = TreeNode(20)
 r.left = TreeNode(11)
@@ -621,6 +637,7 @@ r.right = TreeNode(32)
 r.right.left = TreeNode(22)
 r.right.right = TreeNode(45)
 # print(r)
+# print(preorderT(r))
         
 
 r0 = TreeNode(1)
@@ -634,8 +651,7 @@ r0.left.right.right = TreeNode(8)
 r0.left.right.right.left = TreeNode(9)
 r0.left.right.right.left.left = TreeNode(10)
 print(r0)
-
-print(findTilt(r0))
+print(preorderT(r0))
 
 r1 = TreeNode(15)
 r1.left = TreeNode(10)
