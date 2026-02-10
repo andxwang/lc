@@ -621,3 +621,56 @@ def setZeroes(matrix: List[List[int]]) -> None:
                 matrix[i][j] = 0
         if col0:
             matrix[i][0] = 0
+
+def islandPerimeter(grid: List[List[int]]) -> int:
+    """
+    assume only one island
+    from any cell:
+    if 0 nbor: ct += 4, return
+    if 1 nbor: ct += 3
+    if 2 nbor: ct += 2
+    if 3 nbor: ct += 1
+    if 4 nbor: ct += 0"""
+    start = None
+    height, width = len(grid), len(grid[0])
+    for r in range(height):
+        for c in range(width):
+            if grid[r][c] == 1:
+                start = (r, c)
+                break
+        if start is not None:
+            break
+    else:
+        # no island
+        return 0
+    
+    queue = deque([start])
+    perimeter = 0
+    visited = set([start])
+    while queue:
+        i, j = queue.popleft()
+        num_nbors = 0
+        for di, dj in ((0, 1), (1, 0), (-1, 0), (0, -1)):
+            ni, nj = i + di, j + dj
+            if 0 <= ni < height and 0 <= nj < width:
+                if grid[ni][nj] == 1:
+                    num_nbors += 1
+                    if (ni, nj) not in visited:
+                        queue.append((ni, nj))
+                        visited.add((ni, nj))
+        perimeter += (4 - num_nbors)
+        # print(f"cell {(i, j)} has perimeter {4 - num_nbors} due to {num_nbors} nbors; perim is now {perimeter}")
+
+    return perimeter
+
+more_complex_grid = [
+    [0,0,0,0,0,0,0,0],
+    [0,1,1,1,0,0,0,0],
+    [0,1,0,1,1,1,0,0],
+    [0,1,1,1,0,1,1,0],
+    [0,0,0,1,1,1,0,0],
+    [0,0,0,0,0,0,0,0],
+]
+for _ in more_complex_grid:
+    print(' '.join(colored(str(x), 'green') if x == 1 else str(x) for x in _))
+print(islandPerimeter(more_complex_grid))
