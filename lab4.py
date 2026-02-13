@@ -672,5 +672,32 @@ more_complex_grid = [
     [0,0,0,0,0,0,0,0],
 ]
 for _ in more_complex_grid:
-    print(' '.join(colored(str(x), 'green') if x == 1 else str(x) for x in _))
-print(islandPerimeter(more_complex_grid))
+    print(' '.join(colored(str(x), 'red') if x == 1 else str(x) for x in _))
+
+def floodFill(image: List[List[int]], sr: int, sc: int, color: int) -> List[List[int]]:
+    # result = []
+    start_color = image[sr][sc]
+    height, width = len(image), len(image[0])
+    queue = deque([(sr, sc)])
+    visited = set([(sr, sc)])
+    while queue:
+        i, j = queue.popleft()
+        image[i][j] = color
+        for di, dj in ((0, 1), (1, 0), (0, -1), (-1, 0)):
+            ni, nj = i + di, j + dj
+            if 0 <= ni < height and 0 <= nj < width and image[ni][nj] == start_color and (ni, nj) not in visited:
+                queue.append((ni, nj))
+                visited.add((ni, nj))
+    return image
+
+print(' = ' * len(more_complex_grid[0]))
+new_color = 2
+ffilled = floodFill(more_complex_grid, 2, 2, new_color)
+for row in ffilled:
+    print(' '.join(
+        colored(str(x), 'green') if x == new_color else
+        colored(str(x), 'red') if x == 1 else
+        str(x)
+        for x in row
+    ))
+
