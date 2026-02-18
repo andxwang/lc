@@ -638,14 +638,29 @@ def flatten(root: TreeNode | None):
         
     flatten_aux(root)
 
+def mergeTrees(root1: TreeNode | None, root2: TreeNode | None) -> TreeNode | None:
+    if root1 is None and root2 is None:
+        return None
     
+    if root2 is None:
+        return root1
+    if root1 is None:
+        return root2
+    
+    # merge into root1
+    root1.val = root1.val + root2.val
+    root1.left = mergeTrees(root1.left, root2.left)
+    root1.right = mergeTrees(root1.right, root2.right)
+    
+    return root1
+
+
 r = TreeNode(20)
 r.left = TreeNode(11)
 r.right = TreeNode(32)
 r.right.left = TreeNode(22)
 r.right.right = TreeNode(45)
-# print(r)
-        
+print(r)
 
 r0 = TreeNode(1)
 r0.left = TreeNode(2)
@@ -657,9 +672,7 @@ r0.left.left.left = TreeNode(6)
 r0.left.right.right = TreeNode(8)
 r0.left.right.right.left = TreeNode(9)
 r0.left.right.right.left.left = TreeNode(10)
-print(r0)
-flatten(r0)
-print(r0)
+# print(r0)
 
 r1 = TreeNode(15)
 r1.left = TreeNode(10)
