@@ -613,3 +613,23 @@ class MyStack:
 
     def empty(self) -> bool:
         return len(self.qs[0]) == len(self.qs[1]) == 0
+    
+def lengthLongestPath(input: str) -> int:
+    lines = input.split('\n')
+    ans = 0
+    longest_path_lengths = [0]  # start at 0 for depth 0, maps depth: path len
+    for line in lines:
+        name = line.lstrip('\t')
+        depth = len(line) - len(name)  # count of \t's
+        if '.' in name:
+            curr_path_len = longest_path_lengths[depth] + len(name)
+            ans = max(ans, curr_path_len)
+        else:
+            while len(longest_path_lengths) > depth + 1:  # pop until len(stack) == depth + 1 because of starting 0
+                longest_path_lengths.pop()
+            curr_path_len = longest_path_lengths[depth] + len(name) + 1  # + 1 for '/'
+            longest_path_lengths.append(curr_path_len)
+    
+    return ans
+
+print(lengthLongestPath("dir\n        file.txt"))
