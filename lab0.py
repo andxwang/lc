@@ -635,44 +635,28 @@ def lengthLongestPath(input: str) -> int:
 def checkRain(mountains: list[int]):
     """Given n non-negative integers representing an elevation map where the width of each bar is 1, 
     compute how much water it can trap after raining."""
-    # l, r = 0, len(mountains) - 1
-    # left_max = mountains[l]
-    # right_max = mountains[r]
+    l, r = 0, len(mountains) - 1
+    left_max = mountains[l]
+    right_max = mountains[r]
+    ans = 0
 
-    # for i in range(len(mountains)):
-    #     if mountains[l] < mountains[r]:
+    while l < r:
+        if mountains[l] < mountains[r]:
+            # water at l depends only on left_max
+            if mountains[l] < left_max:
+                ans += left_max - mountains[l]
+            left_max = max(left_max, mountains[l])
+            l += 1
+        elif mountains[r] < mountains[l]:
+            if mountains[r] < right_max:
+                ans += right_max - mountains[r]
+            right_max = max(right_max, mountains[r])
+            r -= 1
+        else:
+            left_max = max(left_max, mountains[l])
+            l += 1
 
-
-
-
-    water = [0] * len(mountains)
-
-    for i in range(len(mountains)):
-        # left max
-        lmax = mountains[i]
-        lmax_idx = i
-        for l in range(i):
-            if mountains[l] > lmax:
-                lmax = mountains[l]
-                lmax_idx = l
-        # right max
-        rmax = mountains[i]
-        rmax_idx = i
-        for r in range(i + 1, len(mountains)):
-            if mountains[r] > rmax:
-                rmax = mountains[r]
-                rmax_idx = r
-
-        if lmax_idx == i or rmax_idx == i:
-            # no possible water here
-            water[i] = 0
-            continue
-
-        water[i] += min(lmax, rmax) - mountains[i]
-
-    return sum(water)
-    
-
+    return ans
 
 
 def print_rain_bars(mountains: list[int]):
