@@ -632,4 +632,92 @@ def lengthLongestPath(input: str) -> int:
     
     return ans
 
-print(lengthLongestPath("dir\n        file.txt"))
+def checkRain(mountains: list[int]):
+    """Given n non-negative integers representing an elevation map where the width of each bar is 1, 
+    compute how much water it can trap after raining."""
+    # l, r = 0, len(mountains) - 1
+    # left_max = mountains[l]
+    # right_max = mountains[r]
+
+    # for i in range(len(mountains)):
+    #     if mountains[l] < mountains[r]:
+
+
+
+
+    water = [0] * len(mountains)
+
+    for i in range(len(mountains)):
+        # left max
+        lmax = mountains[i]
+        lmax_idx = i
+        for l in range(i):
+            if mountains[l] > lmax:
+                lmax = mountains[l]
+                lmax_idx = l
+        # right max
+        rmax = mountains[i]
+        rmax_idx = i
+        for r in range(i + 1, len(mountains)):
+            if mountains[r] > rmax:
+                rmax = mountains[r]
+                rmax_idx = r
+
+        if lmax_idx == i or rmax_idx == i:
+            # no possible water here
+            water[i] = 0
+            continue
+
+        water[i] += min(lmax, rmax) - mountains[i]
+
+    return sum(water)
+    
+
+
+
+def print_rain_bars(mountains: list[int]):
+    if not mountains:
+        print("[]")
+        return
+
+    n = len(mountains)
+    max_h = max(mountains)
+
+    # compute left and right max heights for each position
+    left_max = [0] * n
+    right_max = [0] * n
+    lm = 0
+    for i in range(n):
+        lm = max(lm, mountains[i])
+        left_max[i] = lm
+    rm = 0
+    for i in range(n - 1, -1, -1):
+        rm = max(rm, mountains[i])
+        right_max[i] = rm
+
+    # draw from top level down to 1
+    rows = []
+    for level in range(max_h, 0, -1):
+        row = []
+        for i, h in enumerate(mountains):
+            if h >= level:
+                row.append('#')        # mountain block
+            else:
+                # if bounded on both sides to at least this level, it's water
+                if min(left_max[i], right_max[i]) >= level:
+                    row.append('~')    # water
+                else:
+                    row.append(' ')    # empty
+        rows.append(' '.join(row))
+
+    # print the chart
+    for r in rows:
+        print(r)
+    print('-' * (2 * n - 1))            # baseline
+    print(' '.join(str(h) for h in mountains))
+    
+ms = [0,1,0,2,1,0,1,4,2,1,2,1]
+print_rain_bars(ms)
+print(' '.join([str(i) for i in range(len(ms))]))
+print(checkRain(ms))
+
