@@ -699,9 +699,16 @@ def print_rain_bars(mountains: list[int]):
         print(r)
     print('-' * (2 * n - 1))            # baseline
     print(' '.join(str(h) for h in mountains))
-    
-ms = [0,1,0,2,1,0,1,4,2,1,2,1]
-print_rain_bars(ms)
-print(' '.join([str(i) for i in range(len(ms))]))
-print(checkRain(ms))
 
+def nextHigherTemp(temps: list[int]):
+    ans = [0] * len(temps)
+    stack = []
+    for i in range(len(temps) - 1, -1, -1):
+        while stack and temps[stack[-1]] <= temps[i]:
+            stack.pop()
+        if stack:
+            ans[i] = temps[stack[-1]]  # stack[-1] - i
+        stack.append(i)
+    
+        print(f"stack is {stack}, temps in stack are {stack}")
+    return ans
