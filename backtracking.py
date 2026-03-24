@@ -273,7 +273,26 @@ def wordSearch(board: list[list[str]], word: str) -> bool:
             
     return False
 
-b = [["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]]
-for _ in b:
-    print(_)
-print(wordSearch(b, 'ABCB'))
+def combine(n: int, k: int) -> list[list[int]]:
+    ans = []
+    subset = []
+    def aux(start):
+        if len(subset) == k:
+            ans.append(subset[:])
+            return
+        rem = k - len(subset)
+        # for i in range(start, n + 1):
+        for i in range(start, n + 1 - rem + 1):
+            # optimize by rewriting the following break condition
+            # into the upper bound of the for loop
+            # if i + rem > n + 1: ==> if i > n + 1 - rem:
+            #     break
+            subset.append(i)
+            aux(i + 1)
+            subset.pop()
+        
+    aux(1)
+    return ans
+
+print(combine(6, 4))
+    
