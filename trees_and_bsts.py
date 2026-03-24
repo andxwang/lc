@@ -465,7 +465,7 @@ class BSTIterator:
     def hasNext(self) -> bool:
         return len(self.stack) > 0 or self.curr is not None
 
-from lab1 import ListNode
+from linked_lists import ListNode
 def sortedListToBST(head: ListNode | None) -> TreeNode | None:
     if head is None:
         return None
