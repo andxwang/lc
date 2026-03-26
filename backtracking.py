@@ -294,5 +294,65 @@ def combine(n: int, k: int) -> list[list[int]]:
     aux(1)
     return ans
 
-print(combine(6, 4))
+def readBinaryWatch(turnedOn: int) -> list[str]:
+    """
+    hhhh: no leading zeros
+    mmmmmm: must have leading zero if < 10
+    note: hour cannot be 12
+    """
+    if turnedOn > 8:
+        return []
     
+    def get_hour(hs: list[int]) -> bool:
+        t = 0
+            # t = int(eval(f'0b{''.join([str(i) for i in hs])}'))
+        for pow, d in enumerate(reversed(hs)):
+            t += d * (2 ** pow)
+        return t 
+            
+    def get_min(ms: list[int]) -> bool:
+        t = 0
+            # t = int(eval(f'0b{''.join([str(i) for i in ms])}'))
+        for pow, d in enumerate(reversed(ms)):
+            t += d * (2 ** pow)
+        return t
+
+    ans = []
+    subset = [0] * 10
+    def aux(start, count):
+        # count: how many lights on so far
+        if count == turnedOn:
+            candidate = subset[:]
+            if len(subset) < 10:
+                candidate.extend([0] * (10 - count))
+            # split vals and get hs/ms
+            print("considering", candidate)
+            hs = candidate[:4]
+            ms = candidate[4:]
+            h = get_hour(hs)
+            m = get_min(ms)
+            # print(f"h: {h}\tm: {m}")
+            if h < 12 and m < 60:
+                ans.append(f'{h}:{m:02d}')
+            return
+            
+        rem = turnedOn - count
+        for i in range(start, 9 - rem + 2):           
+            # if not possible hour or not possible min:
+            # if already [1, 1] in hs: skip making this 1 up till index 3
+            if subset[:2] == [1, 1] and (i == 2 or i == 3):
+                continue
+            subset[i] = 1
+            aux(i + 1, count + 1)
+            subset[i] = 0
+            # aux(i + 1, count)
+            # subset.pop()
+        
+    aux(0, 0)
+    return ans
+
+
+# ans = set(readBinaryWatch(2))
+# exp = set(["0:03","0:05","0:06","0:09","0:10","0:12","0:17","0:18","0:20","0:24","0:33","0:34","0:36","0:40","0:48","1:01","1:02","1:04","1:08","1:16","1:32","2:01","2:02","2:04","2:08","2:16","2:32","3:00","4:01","4:02","4:04","4:08","4:16","4:32","5:00","6:00","8:01","8:02","8:04","8:08","8:16","8:32","9:00","10:00"])
+# print(ans - exp)
+# print(exp - ans)
