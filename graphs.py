@@ -663,16 +663,16 @@ def islandPerimeter(grid: List[List[int]]) -> int:
 
     return perimeter
 
-more_complex_grid = [
-    [0,0,0,0,0,0,0,0],
-    [0,1,1,1,0,0,0,0],
-    [0,1,0,1,1,1,0,0],
-    [0,1,1,1,0,1,1,0],
-    [0,0,0,1,1,1,0,0],
-    [0,0,0,0,0,0,0,0],
-]
-for _ in more_complex_grid:
-    print(' '.join(colored(str(x), 'red') if x == 1 else str(x) for x in _))
+# more_complex_grid = [
+#     [0,0,0,0,0,0,0,0],
+#     [0,1,1,1,0,0,0,0],
+#     [0,1,0,1,1,1,0,0],
+#     [0,1,1,1,0,1,1,0],
+#     [0,0,0,1,1,1,0,0],
+#     [0,0,0,0,0,0,0,0],
+# ]
+# for _ in more_complex_grid:
+#     print(' '.join(colored(str(x), 'red') if x == 1 else str(x) for x in _))
 
 def floodFill(image: List[List[int]], sr: int, sc: int, color: int) -> List[List[int]]:
     # result = []
@@ -690,14 +690,40 @@ def floodFill(image: List[List[int]], sr: int, sc: int, color: int) -> List[List
                 visited.add((ni, nj))
     return image
 
-print(' = ' * len(more_complex_grid[0]))
-new_color = 2
-ffilled = floodFill(more_complex_grid, 2, 2, new_color)
-for row in ffilled:
-    print(' '.join(
-        colored(str(x), 'green') if x == new_color else
-        colored(str(x), 'red') if x == 1 else
-        str(x)
-        for x in row
-    ))
+# print(' = ' * len(more_complex_grid[0]))
+# new_color = 2
+# ffilled = floodFill(more_complex_grid, 2, 2, new_color)
+# for row in ffilled:
+#     print(' '.join(
+#         colored(str(x), 'green') if x == new_color else
+#         colored(str(x), 'red') if x == 1 else
+#         str(x)
+#         for x in row
+#     ))
 
+def findCircleNum(isConnected: list[list[int]]) -> int:
+    # connected components
+    # assume isConnected[i][j] == isConnected[j][i]
+    n_provinces = 0
+    # cities: 1 through n
+    visited = set()  # note: can modify in-place as marking the diagonal to 0 (c[i][i] = 0) but more confusing
+    n = len(isConnected)
+    for i in range(n):
+        if i not in visited:  # this one hasn't been touched yet
+            n_provinces += 1
+            visited.add(i)
+            # find all neighbors
+            stack = [i]
+            while stack:
+                city = stack.pop()
+                for nei_idx, nei in enumerate(isConnected[city]):
+                    if nei == 1 and nei_idx not in visited:
+                        visited.add(nei_idx)
+                        stack.append(nei_idx)
+        
+    return n_provinces
+
+cit = [[1,1,0,1],[1,1,0,0],[0,0,1,1],[1,0,1,1]]
+for _ in cit:
+    print(_)
+print(findCircleNum(cit))
