@@ -450,6 +450,35 @@ def findOrder(numCourses: int, prerequisites: List[List[int]]) -> List[int]:
                 
     return topo_sort #if len(topo_sort) == numCourses else []
 
+
+def toposort(numCourses: int, prerequisites: List[List[int]]) -> List[int]:
+    graph = [[] for _ in range(numCourses)]  # graph[i] -> courses after i
+    indegrees = [0] * numCourses
+    for (postreq, prereq) in prerequisites:
+        graph[prereq].append(postreq)
+        indegrees[postreq] += 1
+        
+    queue = deque()
+    for course, n_indegrees in enumerate(indegrees):
+        if n_indegrees == 0:
+            queue.append(course)
+    
+    ans = []    
+    while queue:
+        course = queue.popleft()
+        ans.append(course)
+        for next_course in graph[course]:
+            # "remove" this course node
+            indegrees[next_course] -= 1
+            if indegrees[next_course] == 0:
+                queue.append(next_course)
+                
+    if len(ans) == numCourses:
+        return ans
+    else:
+        return []
+    
+
 def validTree(n: int, edges: List[List[int]]) -> bool:
     # ensure min comes before max in edge tuple
     edges = [(min(a, b), max(a, b)) for (a, b) in edges]
