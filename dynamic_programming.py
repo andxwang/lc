@@ -346,24 +346,17 @@ def longestCommonSubsequenceDfs(text1: str, text2: str) -> int:
             # base case: oob
             cache[(i, j)] = 0
             return 0
+
+        if (i, j) in cache:
+            return cache[(i, j)]
         
         if text1[i] == text2[j]:
-            if (i + 1, j + 1) in cache:
-                return cache[(i + 1, j + 1)] + 1
-            cache[(i, j)] = 1 + dfs(i + 1, j + 1)
-            return cache[(i, j)]
-        
+            result = 1 + dfs(i + 1, j + 1)
         else:
-            if (i, j + 1) in cache:
-                m1 = cache[(i, j + 1)]
-            else:
-                m1 = dfs(i, j + 1)
-            if (i + 1, j) in cache:
-                m2 = cache[(i + 1, j)]
-            else:
-                m2 = dfs(i + 1, j)
-            cache[(i, j)] = max(m1, m2)
-            return cache[(i, j)]
+            result = max(dfs(i, j + 1), dfs(i + 1, j))
+        
+        cache[(i, j)] = result
+        return result
         
     return dfs(0, 0)
 
