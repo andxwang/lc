@@ -338,4 +338,54 @@ def canPartition(nums: list[int]) -> bool:
             
     return target in dp
 
-print(canPartition([4, 6, 7, 2, 3]))
+def longestCommonSubsequenceDfs(text1: str, text2: str) -> int:
+    # SLOWER DFS version- see other for DP
+    cache = {}  # (i, j): lcs
+    def dfs(i, j):
+        if i >= len(text1) or j >= len(text2):
+            # base case: oob
+            cache[(i, j)] = 0
+            return 0
+        
+        if text1[i] == text2[j]:
+            if (i + 1, j + 1) in cache:
+                return cache[(i + 1, j + 1)] + 1
+            cache[(i, j)] = 1 + dfs(i + 1, j + 1)
+            return cache[(i, j)]
+        
+        else:
+            if (i, j + 1) in cache:
+                m1 = cache[(i, j + 1)]
+            else:
+                m1 = dfs(i, j + 1)
+            if (i + 1, j) in cache:
+                m2 = cache[(i + 1, j)]
+            else:
+                m2 = dfs(i + 1, j)
+            cache[(i, j)] = max(m1, m2)
+            return cache[(i, j)]
+        
+    return dfs(0, 0)
+
+print(longestCommonSubsequenceDfs('yigasdfjiwefhdsjflllsdjfhhehehheh', 'sadjfihfuhuehfiwehkahdsf'))
+
+
+def longestCommonSubsequence(text1: str, text2: str) -> int:
+    # DP version: faster
+    arr = [[0] * (len(text2) + 1)  for _ in range(len(text1) + 1)]
+
+    for i in range(len(text1) - 1, -1, -1):
+        for j in range(len(text2) - 1, -1, -1):
+            if text1[i] == text2[j]:
+                # can extend subsequence by 1: look diagonally down and right
+                arr[i][j] = arr[i + 1][j + 1] + 1
+            else:
+                # cannot extend subsequence bc letters differ:
+                # take max of right and down neighbors/subproblems
+                arr[i][j] = max(arr[i + 1][j], arr[i][j + 1])
+    
+    for _ in arr:
+        print(_)
+    return arr[0][0]
+
+print(longestCommonSubsequenceDfs('yigasdfjiwefhdsjflllsdjfhhehehheh', 'sadjfihfuhuehfiwehkahdsf'))
