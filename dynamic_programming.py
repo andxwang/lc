@@ -360,9 +360,6 @@ def longestCommonSubsequenceDfs(text1: str, text2: str) -> int:
         
     return dfs(0, 0)
 
-print(longestCommonSubsequenceDfs('yigasdfjiwefhdsjflllsdjfhhehehheh', 'sadjfihfuhuehfiwehkahdsf'))
-
-
 def longestCommonSubsequence(text1: str, text2: str) -> int:
     # DP version: faster
     arr = [[0] * (len(text2) + 1)  for _ in range(len(text1) + 1)]
@@ -381,4 +378,24 @@ def longestCommonSubsequence(text1: str, text2: str) -> int:
         print(_)
     return arr[0][0]
 
-print(longestCommonSubsequenceDfs('yigasdfjiwefhdsjflllsdjfhhehehheh', 'sadjfihfuhuehfiwehkahdsf'))
+def coinChangeII_dfs(amount: int, coins: List[int]) -> int:
+    def dfs(i, curr_amt) -> int:
+        if curr_amt > amount:
+            return 0  # exceeded amount; can't possibly have a correct case here
+        if curr_amt == amount:
+            return 1  # if we've gotten here, this is exactly 1 correct case
+        if i >= len(coins):
+            return 0  # out of bounds on coins; no further options, can't have a correct case
+        
+        ct = 0
+        # continue choosing coin i
+        ct += dfs(i, curr_amt + coins[i])
+        
+        # or don't choose it
+        ct += dfs(i + 1, curr_amt)
+        
+        return ct
+        
+    return dfs(0, 0)
+
+print(coinChangeII_dfs(5, [1, 2, 5]))
