@@ -398,4 +398,26 @@ def coinChangeII_dfs(amount: int, coins: List[int]) -> int:
         
     return dfs(0, 0)
 
-print(coinChangeII_dfs(5, [1, 2, 5]))
+print(coinChangeII_dfs(13, [1, 3, 4, 8, 9]))
+
+def coinChangeII(amount: int, coins: List[int]) -> int:
+    dp = [[0] * (len(coins) + 1) for _ in range(amount)]
+    dp.append([1] * (len(coins) + 1))
+    
+    # for _ in dp:
+    #     print(_)
+    # print('=' * 50)
+        
+    # start from bottom right; go left then up
+    for curr_amt in range(amount - 1, -1, -1):
+        for coin_idx in range(len(coins) - 1, -1, -1):
+            # down: same coin, increase by coin amount
+            down = dp[curr_amt + coins[coin_idx]][coin_idx] if curr_amt + coins[coin_idx] <= amount else 0
+            # right: move on to next coin, stay at same curr_amt
+            right = dp[curr_amt][coin_idx + 1]  # no need to check oob coin bc padded rightmost col before
+            dp[curr_amt][coin_idx] = down + right
+    # for _ in dp:
+    #     print(_)
+    return dp[0][0]
+        
+print(coinChangeII(13, [1, 3, 4, 8, 9]))
