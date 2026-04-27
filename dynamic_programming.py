@@ -398,8 +398,6 @@ def coinChangeII_dfs(amount: int, coins: List[int]) -> int:
         
     return dfs(0, 0)
 
-print(coinChangeII_dfs(13, [1, 3, 4, 8, 9]))
-
 def coinChangeII(amount: int, coins: List[int]) -> int:
     dp = [[0] * (len(coins) + 1) for _ in range(amount)]
     dp.append([1] * (len(coins) + 1))
@@ -419,5 +417,36 @@ def coinChangeII(amount: int, coins: List[int]) -> int:
     # for _ in dp:
     #     print(_)
     return dp[0][0]
+    
+from collections import defaultdict    
+def findTargetSumWays(nums: List[int], target: int) -> int:
+    cache = defaultdict(int)
+    def dfs(i, cum_sum) -> int:
+        if i == len(nums):
+            if cum_sum == target:
+                cache[(i, cum_sum)] = 1
+                return 1
+            cache[(i, cum_sum)] = 0
+            return 0
         
-print(coinChangeII(13, [1, 3, 4, 8, 9]))
+        if (i, cum_sum) in cache:
+            return cache[(i, cum_sum)]
+        
+        # branch: + positive number
+        cum_sum += nums[i]
+        add = dfs(i + 1, cum_sum)
+        
+        # reset
+        cum_sum -= nums[i]
+        # branch: + negative number
+        cum_sum -= nums[i]
+        sub = dfs(i + 1, cum_sum)
+        
+        cum_sum += nums[i]
+        
+        cache[(i, cum_sum)] = add + sub
+        return add + sub
+    
+    return dfs(0, 0)
+
+print(findTargetSumWays([2, 1, 1, 2, 2, 1, 2, 1, 1, 2, 2, 1, 1, 2], 1))
