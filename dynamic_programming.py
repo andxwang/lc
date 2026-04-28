@@ -418,8 +418,8 @@ def coinChangeII(amount: int, coins: List[int]) -> int:
     #     print(_)
     return dp[0][0]
     
-from collections import defaultdict    
-def findTargetSumWays(nums: List[int], target: int) -> int:
+from collections import defaultdict
+def findTargetSumWaysDfs(nums: List[int], target: int) -> int:
     cache = defaultdict(int)
     def dfs(i, cum_sum) -> int:
         if i == len(nums):
@@ -449,4 +449,37 @@ def findTargetSumWays(nums: List[int], target: int) -> int:
     
     return dfs(0, 0)
 
-print(findTargetSumWays([2, 1, 1, 2, 2, 1, 2, 1, 1, 2, 2, 1, 1, 2], 1))
+def findTargetSumWays(nums: List[int], target: int) -> int:
+    n = len(nums)
+    S = sum(nums)
+    if abs(target) > abs(S):
+        return 0
+    # n rows x [-sum, sum] cols
+    dp = [[0] * (2 * S + 1) for _ in range(n + 1)]
+    M_idx = S  # idx of "middle" column, where sum = 0
+    dp[n][M_idx + target] = 1
+    for _ in dp:
+        print(_)
+    
+    for i in range(n - 1, -1, -1):
+        print('=' * 80)
+        for s in range(-S, S + 1):
+            if -S <= s - nums[i]:
+                sub = dp[i + 1][s - nums[i] + M_idx]
+            else:
+                sub = 0
+            if s + nums[i] <= S:
+                add = dp[i + 1][s + nums[i] + M_idx]
+            else:
+                add = 0
+                
+            dp[i][s + M_idx] = sub + add
+                
+        for _ in dp:
+            print(_)
+
+                
+    return dp[0][M_idx]
+    
+
+print(findTargetSumWays([1,1,2,1], 3))
