@@ -477,4 +477,20 @@ def findTargetSumWays(nums: List[int], target: int) -> int:
             
     return dp[n][P]
 
-print(findTargetSumWays([1,1,2,1], 3))
+def findTargetSumWays1D(nums: List[int], target: int) -> int:
+    S = sum(nums)
+    if abs(target) > abs(S):
+        return 0
+    P = (S + target) // 2
+    if (S + target) / 2 != P:
+        return 0
+    
+    dp = [0] * (P + 1)
+    dp[0] = 1
+    for num in nums:
+        for s in range(P, num - 1, -1):
+            dp[s] += dp[s - num] if s - num >= 0 else 0
+            
+    return dp[P]
+
+print(findTargetSumWays1D([1,1,2,1], 3))
