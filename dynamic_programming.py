@@ -493,4 +493,31 @@ def findTargetSumWays1D(nums: List[int], target: int) -> int:
             
     return dp[P]
 
-print(findTargetSumWays1D([1,1,2,1], 3))
+def maxProfitBuySell(prices: List[int]) -> int:
+    cache = {}
+
+    def dfs(i, can_buy: bool):
+        if i >= len(prices):
+            return 0
+        if (i, can_buy) in cache:
+            return cache[(i, can_buy)]
+
+        if can_buy:
+            # do buy
+            profit_if_buy = -prices[i] + dfs(i + 1, False)
+            # cooldown
+            profit_if_cooldown = dfs(i + 1, True)
+            cache[(i, can_buy)] = max(profit_if_buy, profit_if_cooldown)
+
+        else:
+            # cool down
+            profit_if_cooldown = dfs(i + 1, False)
+            # sell
+            profit_if_sell = dfs(i + 2, True) + prices[i]
+            cache[(i, can_buy)] = max(profit_if_cooldown, profit_if_sell)
+
+        return cache[(i, can_buy)]
+    
+    return dfs(0, True)
+
+print(maxProfitBuySell([2, 5, 4, 3, 6]))
